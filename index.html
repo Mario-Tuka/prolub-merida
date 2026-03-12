@@ -197,7 +197,7 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
     </div>
     <div class="fg">
       <label class="fl">Código Postal</label>
-      <input class="fi" id="cli-cp" placeholder="Ej: 97000" maxlength="5" oninput="buscarColonias(this.value)">
+      <input class="fi" id="cli-cp" placeholder="Ej: 97000" maxlength="5" oninput="buscarColonias(this.value)" onchange="buscarColonias(this.value)" onblur="buscarColonias(this.value)">
     </div>
     <div class="fg">
       <label class="fl">Colonia</label>
@@ -851,6 +851,13 @@ function limpiarPantalla() {
 
 document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-MX', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
 testConn();
+// Auto-disparar CP si ya tiene valor al cargar
+(function() {
+  var cpField = document.getElementById('cli-cp');
+  if (cpField && cpField.value && cpField.value.length === 5) {
+    buscarColonias(cpField.value);
+  }
+})();
 </script>
 </body>
 </html>
