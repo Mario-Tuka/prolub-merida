@@ -237,11 +237,24 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
 <!-- TABLA -->
 <div class="table-section">
   <div class="table-header">
-    <div class="sec-icon ic-orange">️</div>
-          <th class="ci" style="min-width:148px">Frecuencia / Forecast</th>
-          <th style="width:80px;text-align:center">Guardar</th>
-        </tr>
-      </thead>
+    <div class="sec-icon ic-orange">📦</div>
+    <h2 class="sec-title">Productos</h2>
+  </div>
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:36px">#</th>
+        <th class="ci" style="min-width:180px">Producto</th>
+        <th class="ci" style="min-width:120px">Marca</th>
+        <th class="ci" style="min-width:130px">Presentación</th>
+        <th class="ci" style="min-width:110px">Unidad</th>
+        <th class="ci" style="min-width:90px">Pz / Present.</th>
+        <th class="ci" style="min-width:130px">Precio Compra (sin IVA)</th>
+        <th class="ci" style="min-width:148px">Frecuencia / Forecast</th>
+        <th style="width:80px;text-align:center">Guardar</th>
+      </tr>
+    </thead>
       <tbody id="tbody">
         <tr id="empty-row">
           <td colspan="8">
@@ -291,6 +304,45 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
 const SUPA_URL = 'https://vqhmksletdhbtkeldtmh.supabase.co';
 const SUPA_KEY = 'sb_publishable_aW18t1A4NkwKNDr6leJYHA_K9CwbDZt';
 const {createClient} = supabase; const db = createClient(SUPA_URL, SUPA_KEY);
+
+// ─── CÓDIGO POSTAL → COLONIAS ─────────────────────────────────
+async function buscarColonias(cp) {
+  const sel = document.getElementById('cli-colonia');
+  const ciudad = document.getElementById('cli-ciudad');
+  if (!sel || !ciudad) return;
+  if (cp.length < 5) {
+    sel.innerHTML = '<option value="">Ingresa CP primero...</option>';
+    ciudad.value = '';
+    return;
+  }
+  sel.innerHTML = '<option>Buscando...</option>';
+  ciudad.value = 'Cargando...';
+  try {
+    const r = await fetch(`https://api.zippopotam.us/MX/${cp}`);
+    if (!r.ok) throw new Error('CP no encontrado');
+    const d = await r.json();
+    const places = d.places || [];
+    if (places.length === 0) throw new Error('Sin colonias');
+    sel.innerHTML = '';
+    places.forEach(function(p, i) {
+      const opt = document.createElement('option');
+      opt.value = p['place name'];
+      opt.textContent = p['place name'];
+      if (i === 0) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    ciudad.value = places[0]['place name'].includes(',') 
+      ? places[0]['place name'].split(',')[1].trim() 
+      : (d['post code'] ? places[0].state : places[0]['state abbreviation'] || places[0].state);
+    // Usar state como ciudad/municipio
+    ciudad.value = places[0].state || '';
+  } catch(e) {
+    sel.innerHTML = '<option value="">CP no encontrado</option>';
+    ciudad.value = '';
+    // Fallback: dejar que el usuario escriba manualmente
+    sel.innerHTML = '<option value="otra">Otra colonia (escribir abajo)</option>';
+  }
+}
 
 async function testConn() {
   try {
