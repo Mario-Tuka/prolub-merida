@@ -452,6 +452,10 @@ async function guardarFila(i) {
   var rec = {
     cliente_nombre: nombre,
     cliente_dir: dir,
+    cliente_calle: calle,
+    cliente_colonia: colonia,
+    cliente_cp: cp,
+    cliente_ciudad: ciudad,
     cliente_giro: giro,
     producto: prod,
     marca: marca,
@@ -562,13 +566,27 @@ async function descargarKardex() {
     lines.push('"Generado:","' + fecha + '"');
     lines.push('"Total registros:","' + data.length + '"');
     lines.push('');
-    lines.push(['"#"','"Cliente"','"Dirección"','"Giro"','"Producto"','"Marca"','"Presentación"','"Unidad"','"Pz / Present."','"Precio Compra (sin IVA)"','"Frecuencia / Forecast"','"Fecha Captura"'].join(','));
+    lines.push(['"#"','"Cliente"','"Calle y Número"','"Colonia"','"CP"','"Ciudad"','"Estado"','"Giro"','"Producto"','"Marca"','"Presentación"','"Unidad"','"Pz / Present."','"Precio Compra (sin IVA)"','"Frecuencia / Forecast"','"Fecha"','"Hora (Mérida)"'].join(','));
 
     data.forEach(function(r, idx) {
+      // Para registros viejos, intentar parsear cliente_dir
+      var calle_val   = r.cliente_calle   || '';
+      var colonia_val = r.cliente_colonia || '';
+      var cp_val      = r.cliente_cp      || '';
+      var ciudad_val  = r.cliente_ciudad  || '';
+      // Si no hay campos separados, usar cliente_dir completo en Calle
+      if (!calle_val && !colonia_val && r.cliente_dir) {
+        calle_val = r.cliente_dir;
+      }
+      var fc = r.fecha_captura ? new Date(r.fecha_captura) : null;
       lines.push([
         '"'+(idx+1)+'"',
         '"'+(r.cliente_nombre||'')+'"',
-        '"'+(r.cliente_dir||'')+'"',
+        '"'+calle_val+'"',
+        '"'+colonia_val+'"',
+        '"'+cp_val+'"',
+        '"'+ciudad_val+'"',
+        '"Yucatán"',
         '"'+(r.cliente_giro||'')+'"',
         '"'+(r.producto||'')+'"',
         '"'+(r.marca||'')+'"',
@@ -577,7 +595,8 @@ async function descargarKardex() {
         '"'+(r.pz_presentacion||'')+'"',
         '"'+(r.precio_compra||'')+'"',
         '"'+(r.frecuencia||'')+'"',
-        '"'+(r.fecha_captura ? new Date(r.fecha_captura).toLocaleDateString('es-MX') + ' ' + new Date(r.fecha_captura).toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}) : '')+'"'
+        '"'+(fc ? fc.toLocaleDateString('es-MX') : '')+'"',
+        '"'+(fc ? fc.toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}) : '')+'"'
       ].join(','));
     });
 
@@ -717,6 +736,10 @@ async function iniciarBarrido() {
         var rec = {
           cliente_nombre: nombre,
           cliente_dir: dir,
+          cliente_calle: calle,
+          cliente_colonia: colonia,
+          cliente_cp: cp,
+          cliente_ciudad: ciudad,
           cliente_giro: giro,
           producto: f.prod,
           marca: f.marca,
