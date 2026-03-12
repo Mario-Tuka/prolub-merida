@@ -566,7 +566,7 @@ async function descargarKardex() {
         '"'+(r.pz_presentacion||'')+'"',
         '"'+(r.precio_compra||'')+'"',
         '"'+(r.frecuencia||'')+'"',
-        '"'+(r.fecha_captura ? new Date(r.fecha_captura).toLocaleDateString('es-MX') : '')+'"'
+        '"'+(r.fecha_captura ? new Date(r.fecha_captura).toLocaleDateString('es-MX') + ' ' + new Date(r.fecha_captura).toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}) : '')+'"'
       ].join(','));
     });
 
