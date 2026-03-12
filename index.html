@@ -170,6 +170,7 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
   <div class="spacer"></div>
   <div class="db-status"><div class="db-dot" id="db-dot"></div><span id="db-txt" style="color:var(--muted)">conectando...</span></div>
   <div class="top-badge">LIVE</div>
+  <div class="top-badge" id="badge-stats" style="display:none"></div>
   <button class="btn-nueva" onclick="abrirModal()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
     <span>Nuevo cliente (Reset)</span>
@@ -313,7 +314,16 @@ async function testConn() {
     const { error } = await db.from('merida_registros').select('id').limit(1);
     if (error) throw error;
     document.getElementById('db-dot').className = 'db-dot ok';
-    document.getElementById('db-txt').textContent = 'base de datos ✓';
+    document.getElementById('db-txt').textContent = 'conectado';
+    // Contar clientes únicos y productos totales
+    var { data: todos } = await db.from('merida_registros').select('nombre_cliente');
+    if (todos) {
+      var clientes = new Set(todos.map(r => r.nombre_cliente)).size;
+      var productos = todos.length;
+      var badge = document.getElementById('badge-stats');
+      badge.textContent = clientes + ' clientes · ' + productos + ' productos';
+      badge.style.display = '';
+    }
   } catch(e) {
     document.getElementById('db-dot').className = 'db-dot err';
     document.getElementById('db-txt').textContent = 'sin conexión';
@@ -473,6 +483,7 @@ async function guardarFila(i) {
     if (delBtn) delBtn.style.display = 'inline-flex';
     toast('✓ Producto guardado correctamente', 'ok');
     upd();
+    testConn();
   } catch(e) {
     sb.disabled = false;
     sb.textContent = 'Guardar';
