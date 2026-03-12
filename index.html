@@ -18,6 +18,7 @@
 html,body{overflow-x:hidden}
 body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
 
+/* TOPBAR */
 .topbar{background:linear-gradient(90deg,#fff,#f4f6f9);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(0,0,0,.07)}
 .logo-block{display:flex;align-items:center;gap:10px}
 .logo-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
@@ -29,95 +30,135 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14
 .btn-export{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.75rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
 .btn-export:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(34,197,94,.3)}
 .btn-export svg{width:14px;height:14px;flex-shrink:0}
-.btn-nueva{background:linear-gradient(135deg,var(--accent2),#2563eb);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.75rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
-.btn-nueva:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(59,130,246,.3)}
-
-.db-status{display:flex;align-items:center;gap:6px;font-size:.7rem;font-family:var(--mono);color:var(--muted)}
-.db-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);transition:background .4s}
-.db-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
-.db-dot.err{background:var(--red)}
-
-.main{max-width:1400px;margin:0 auto;padding:20px}
-
+/* CLIENT */
 .client-section{margin:20px 20px 0;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.sec-hd{background:linear-gradient(90deg,var(--surface),var(--surface2));padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.sec-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem}
-.ic-blue{background:rgba(59,130,246,.12)}
-.ic-orange{background:rgba(249,115,22,.12)}
-.sec-title{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.client-grid{display:grid;grid-template-columns:1fr 1fr 160px;gap:14px;padding:16px 18px}
-.client-grid2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:0 18px 16px}
-.fi-group{display:flex;flex-direction:column;gap:4px}
-.fi-label{font-size:.65rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.fi{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-family:var(--font);font-size:.85rem;color:var(--text);background:var(--surface);transition:border .2s,box-shadow .2s;outline:none}
-.fi:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
-select.fi{cursor:pointer}
+.sec-hd{background:linear-gradient(90deg,var(--surface2),var(--surface));padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sec-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.ic-blue{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2)}
+.ic-orange{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)}
+.sec-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.tc-blue{color:var(--accent2)}
+.tc-orange{color:var(--accent)}
+.client-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:16px 18px}
+@media(max-width:680px){.client-grid{grid-template-columns:1fr}}.fg{display:flex;flex-direction:column;gap:5px}
+.fl{font-family:var(--mono);font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.fi{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:.8rem;color:var(--text);outline:none;transition:all .2s;width:100%}
+.fi:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.fi::placeholder{color:var(--muted);opacity:.6}
 
-.progress-section{margin:14px 20px 0;display:flex;align-items:center;gap:12px}
-.pb{flex:1;height:6px;background:var(--surface2);border-radius:99px;overflow:hidden}
-.pf{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .4s}
-.pt{font-size:.72rem;font-family:var(--mono);color:var(--muted);white-space:nowrap}
+/* PROGRESS */
+.progress-section{margin:14px 20px;padding:12px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:14px}
+.pb{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;transition:width .4s ease;width:0%}
+.pt{font-family:var(--mono);font-size:.62rem;color:var(--muted);white-space:nowrap}
+.pt strong{color:var(--text)}
 
-.table-section{margin:14px 20px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.table-hd{background:linear-gradient(90deg,var(--surface),var(--surface2));padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.tbl-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse}
+/* TABLE */
+.table-section{margin:0 20px 24px}
+.table-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.counter{margin-left:auto;font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+.counter span{color:var(--green);font-weight:600}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:860px}
 thead tr{background:linear-gradient(90deg,#f0f3f7,#e8ecf3)}
-th{padding:10px 10px;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent);text-align:left;white-space:nowrap;border-bottom:2px solid var(--border)}
-td{padding:6px 6px;border-bottom:1px solid var(--border);vertical-align:middle}
-tr:last-child td{border-bottom:none}
-tr.saved{background:rgba(34,197,94,.04)}
-.ti{width:100%;padding:7px 9px;border:1px solid var(--border);border-radius:6px;font-family:var(--font);font-size:.82rem;color:var(--text);background:var(--surface);outline:none;transition:border .2s}
-.ti:focus{border-color:var(--accent2)}
-.ti.saved-input{background:var(--surface2);color:var(--muted)}
-select.ti{cursor:pointer}
-.num-cell{font-family:var(--mono);font-size:.75rem;color:var(--muted);text-align:center;width:32px}
-.btn-save{background:linear-gradient(135deg,var(--accent2),#2563eb);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .2s}
-.btn-save:hover{transform:translateY(-1px)}
-.btn-save:disabled{background:var(--green);cursor:default;transform:none}
-.btn-del{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 8px;border-radius:6px;cursor:pointer;font-size:.8rem;transition:all .2s}
-.btn-del:hover{border-color:var(--red);color:var(--red)}
-.empty-state{padding:32px;text-align:center;color:var(--muted);font-size:.85rem}
+th{padding:11px 12px;text-align:left;font-family:var(--mono);font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+th.cp{color:var(--text);font-size:.62rem}
+th.ci{color:var(--accent)}
+tbody tr{border-bottom:1px solid rgba(221,226,234,.7);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(249,115,22,.025)}
+tbody tr.done{background:rgba(34,197,94,.04)}
+tbody tr.done:hover{background:rgba(34,197,94,.07)}
+td{padding:7px 10px;vertical-align:middle}
+.ti{background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-family:var(--font);font-size:.75rem;color:var(--text);outline:none;transition:all .2s;width:100%}
+.ti:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(249,115,22,.12);background:#fff}
+.ti::placeholder{color:var(--muted);opacity:.5;font-size:.68rem}
+.ti.ok{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.05)}
+.ts{background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-family:var(--font);font-size:.75rem;color:var(--text);outline:none;transition:all .2s;width:100%;cursor:pointer}
+.ts:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(249,115,22,.12)}
+.ts.ok{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.05)}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block;transition:all .3s}
+.sdot.on{background:var(--green);box-shadow:0 0 5px var(--green)}
+
+/* SAVED ROW */
+tbody tr.saved{background:rgba(34,197,94,.06)}
+tbody tr.saved td{color:var(--text)}
+tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,197,94,.3);color:var(--text)}
+
+/* ADD BUTTON */
+.btn-add{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px dashed var(--border);border-radius:10px;padding:10px 18px;cursor:pointer;width:100%;margin-top:10px;font-family:var(--font);font-size:.75rem;font-weight:600;color:var(--muted);transition:all .2s}
+.btn-add:hover{border-color:var(--accent);color:var(--accent);background:rgba(249,115,22,.04)}
+.btn-add svg{width:15px;height:15px;flex-shrink:0}
+
+/* SAVE ROW BUTTON */
+.btn-save-row{background:linear-gradient(135deg,var(--accent2),#2563eb);color:#fff;border:none;padding:5px 11px;border-radius:6px;font-family:var(--font);font-size:.68rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-save-row:hover{opacity:.85}
+.btn-save-row:disabled{background:var(--green);cursor:default;opacity:1}
+
+/* NUEVA CAPTURA */
+.btn-nueva{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.75rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
+.btn-nueva:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(124,58,237,.35)}
+.btn-nueva svg{width:14px;height:14px;flex-shrink:0}
+/* MODAL CONFIRM */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-title{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:8px}
+.modal-sub{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:20px}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.modal-cancel{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-family:var(--font);font-weight:600;font-size:.78rem;cursor:pointer}
+.modal-ok{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.78rem;cursor:pointer}
+
+/* SWEEP OVERLAY */
+.sweep-overlay{position:fixed;inset:0;background:rgba(15,23,42,.82);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.sweep-overlay.open{display:flex}
+.sweep-box{background:#fff;border-radius:20px;padding:32px 36px;max-width:420px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.sweep-title{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.sweep-sub{font-size:.75rem;color:var(--muted);margin-bottom:22px;line-height:1.5}
+.sweep-rows{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;margin-bottom:20px}
+.sweep-row{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--border);font-size:.72rem;text-align:left;transition:all .3s}
+.sweep-row.saving{background:rgba(59,130,246,.07);border-color:rgba(59,130,246,.3)}
+.sweep-row.done{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3)}
+.sweep-row.err{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.3)}
+.sweep-row.skip{background:rgba(107,122,144,.05);border-color:var(--border);opacity:.6}
+.sweep-icon{font-size:.9rem;flex-shrink:0;width:18px;text-align:center}
+.sweep-name{flex:1;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sweep-status{font-family:var(--mono);font-size:.6rem;color:var(--muted);white-space:nowrap}
+.sweep-bar-wrap{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:16px}
+.sweep-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;width:0%;transition:width .35s ease}
+.sweep-counter{font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:4px}
+.sweep-done-msg{font-size:.8rem;font-weight:700;color:var(--green);display:none}
+.btn-sweep-next{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;padding:10px 24px;border-radius:10px;font-family:var(--font);font-weight:700;font-size:.8rem;cursor:pointer;display:none;width:100%;margin-top:4px;transition:all .2s}
+.btn-sweep-next:hover{opacity:.88}
+/* EMPTY */
+.empty-state{padding:32px;text-align:center;color:var(--muted);font-size:.8rem}
 .empty-icon{font-size:2rem;margin-bottom:8px}
 
-.btn-add{display:flex;align-items:center;gap:8px;margin:12px 18px 16px;background:var(--surface2);border:1px dashed var(--border);color:var(--muted);padding:10px 16px;border-radius:8px;font-family:var(--font);font-size:.8rem;cursor:pointer;transition:all .2s;width:calc(100% - 36px)}
-.btn-add:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(59,130,246,.04)}
-.btn-add svg{width:16px;height:16px}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;padding:12px 18px;border-radius:10px;font-size:.78rem;font-weight:600;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;font-family:var(--mono);box-shadow:0 4px 20px rgba(0,0,0,.12)}
 
-.footer{text-align:center;padding:20px;color:var(--muted);font-size:.65rem;font-family:var(--mono);letter-spacing:.06em}
-.fecha-footer{color:var(--accent);font-weight:600}
+/* DELETE ROW BUTTON (solo visual, registra intento en admin) */
+.btn-del-row{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#ef4444;padding:4px 7px;border-radius:6px;font-size:.75rem;cursor:pointer;transition:all .2s;display:none;align-items:center;justify-content:center}
+.btn-del-row:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
 
-.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;font-size:.82rem;font-weight:600;color:#fff;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;max-width:320px}
-.toast.show{opacity:1;transform:translateY(0)}
-.toast.ok{background:var(--green)}
-.toast.err{background:var(--red)}
-.toast.warn{background:var(--accent)}
+.footer{text-align:center;padding:20px;font-family:var(--mono);font-size:.58rem;color:var(--muted);border-top:1px solid var(--border)}
 
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
-.modal-bg.show{display:flex}
-.modal{background:#fff;border-radius:16px;padding:28px 32px;max-width:400px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.modal h3{font-size:1rem;font-weight:800;margin-bottom:8px}
-.modal p{font-size:.82rem;color:var(--muted);margin-bottom:20px;line-height:1.5}
-.modal-btns{display:flex;gap:10px;justify-content:flex-end}
-.btn-cancel{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 18px;border-radius:8px;font-family:var(--font);font-weight:600;font-size:.8rem;cursor:pointer}
-.btn-confirm{background:linear-gradient(135deg,var(--accent2),#2563eb);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.8rem;cursor:pointer}
+/* DB STATUS */
+.db-status{font-family:var(--mono);font-size:.6rem;display:flex;align-items:center;gap:5px}
+.db-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}
+.db-dot.ok{background:var(--green)}
+.db-dot.err{background:var(--red)}
 
-.sweep-overlay{display:none;position:fixed;inset:0;background:rgba(10,15,30,.92);z-index:500;align-items:center;justify-content:center}
-.sweep-overlay.show{display:flex}
-.sweep-box{background:#fff;border-radius:20px;padding:36px 40px;max-width:480px;width:92%;text-align:center}
-.sweep-title{font-size:1.1rem;font-weight:800;margin-bottom:6px}
-.sweep-sub{font-size:.8rem;color:var(--muted);margin-bottom:20px}
-.sweep-counter{font-family:var(--mono);font-size:2rem;font-weight:700;color:var(--accent2);margin-bottom:12px}
-.sweep-bar-wrap{background:var(--surface2);border-radius:99px;height:8px;overflow:hidden;margin-bottom:16px}
-.sweep-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .3s}
-.sweep-rows{font-size:.75rem;color:var(--muted);max-height:120px;overflow-y:auto;text-align:left;margin-bottom:16px}
-.sweep-done-msg{display:none;color:var(--green);font-weight:700;font-size:.9rem;margin-bottom:16px}
-.btn-sweep-next{display:none;background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;border:none;padding:10px 24px;border-radius:10px;font-family:var(--font);font-weight:700;font-size:.85rem;cursor:pointer}
+@media(max-width:600px){
+  .topbar{padding:10px 14px;gap:8px}
+  .client-section,.table-section,.progress-section{margin-left:12px;margin-right:12px}
+  .btn-export span{display:none}
+  .top-badge{display:none}
+}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="logo-block">
     <div class="logo-dot"></div>
@@ -126,20 +167,16 @@ select.ti{cursor:pointer}
       <div class="logo-sub">Captura de datos de cliente</div>
     </div>
   </div>
-  <div class="db-status">
-    <div class="db-dot" id="db-dot"></div>
-    <span id="db-label">conectando...</span>
-  </div>
-  <div class="top-badge">LIVE</div>
-  <div class="top-badge" id="global-stats" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.3);color:var(--accent2)">cargando...</div>
   <div class="spacer"></div>
+  <div class="db-status"><div class="db-dot" id="db-dot"></div><span id="db-txt" style="color:var(--muted)">conectando...</span></div>
+  <div class="top-badge">LIVE</div>
   <button class="btn-nueva" onclick="abrirModal()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Nuevo cliente
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    <span>Nuevo cliente (Reset)</span>
   </button>
   <button class="btn-export" onclick="descargarKardex()">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-    Kardex
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    <span>Kardex</span>
   </button>
 </div>
 
@@ -147,54 +184,44 @@ select.ti{cursor:pointer}
 <div class="client-section">
   <div class="sec-hd">
     <div class="sec-icon ic-blue">👤</div>
-    <div class="sec-title">Datos del Cliente</div>
+    <div class="sec-title tc-blue">Datos del Cliente</div>
   </div>
   <div class="client-grid">
-    <div class="fi-group" style="grid-column:1/3">
-      <label class="fi-label">Nombre del Cliente</label>
+    <div class="fg">
+      <label class="fl">Nombre del Cliente</label>
       <input class="fi" id="cli-nombre" placeholder="Nombre o razón social">
     </div>
-    <div class="fi-group">
-      <label class="fi-label">Código Postal</label>
-      <input class="fi" id="cli-cp" placeholder="Ej: 97000" maxlength="5" oninput="buscarColonias(this.value)" onchange="buscarColonias(this.value)" onblur="buscarColonias(this.value)">
+    <div class="fg">
+      <label class="fl">Calle y Número</label>
+      <input class="fi" id="cli-calle" placeholder="Ej: Av. Reforma 123">
     </div>
-  </div>
-  <div class="client-grid2">
-    <div class="fi-group">
-      <label class="fi-label">Calle y Número</label>
-      <input class="fi" id="cli-dir" placeholder="Ej: Av. Reforma 123">
+    <div class="fg">
+      <label class="fl">Código Postal</label>
+      <input class="fi" id="cli-cp" placeholder="Ej: 97000" maxlength="5">
     </div>
-    <div class="fi-group">
-      <label class="fi-label">Colonia</label>
-      <select class="fi" id="cli-colonia">
-        <option value="">Ingresa CP primero...</option>
-      </select>
+    <div class="fg">
+      <label class="fl">Colonia</label>
+      <input class="fi" id="cli-colonia" placeholder="Ej: García Ginerés">
     </div>
-    <div class="fi-group">
-      <label class="fi-label">Ciudad / Municipio</label>
-      <input class="fi" id="cli-ciudad" placeholder="Cargando..." readonly style="background:#f0f3f7;color:var(--muted)">
+    <div class="fg">
+      <label class="fl">Ciudad / Municipio</label>
+      <input class="fi" id="cli-ciudad" placeholder="Ej: Mérida">
     </div>
-  </div>
-  <div style="padding:0 18px 16px">
-    <div class="fi-group">
-      <label class="fi-label">Giro de Negocio</label>
-      <select class="fi" id="cli-giro" onchange="toggleGiroOtro(this.value)">
+    <div class="fg">
+      <label class="fl">Giro de Negocio</label>
+      <select class="fi" id="cli-giro">
         <option value="">Seleccionar giro...</option>
-        <option>Taller mecánico</option>
-        <option>Taller de transmisiones</option>
-        <option>Taller de frenos</option>
-        <option>Distribuidora de lubricantes</option>
-        <option>Gasolinera</option>
-        <option>Transporte de carga</option>
-        <option>Transporte de pasajeros</option>
-        <option>Agricultura / Campo</option>
-        <option>Construcción</option>
-        <option>Industria / Manufactura</option>
+        <option>Automotriz / Taller Mecánico</option>
+        <option>Distribución / Mayorista</option>
+        <option>Agrícola / Campo</option>
+        <option>Industrial / Manufactura</option>
+        <option>Transporte / Logística</option>
         <option>Minería</option>
-        <option>Marina / Náutica</option>
+        <option>Servicio Pesado</option>
+        <option>Marino / Pesca</option>
+        <option>Comercio / Retail</option>
         <option>Otro</option>
       </select>
-      <input class="fi" id="cli-giro-otro" placeholder="Describe el giro de negocio..." style="display:none;margin-top:8px">
     </div>
   </div>
 </div>
@@ -205,25 +232,26 @@ select.ti{cursor:pointer}
   <div class="pt"><strong id="pn">0</strong> / <strong id="pt2">0</strong> productos guardados</div>
 </div>
 
-<!-- TABLA PRODUCTOS -->
+<!-- TABLA -->
 <div class="table-section">
-  <div class="table-hd">
-    <div class="sec-icon ic-orange">📦</div>
-    <div class="sec-title">Productos</div>
+  <div class="table-header">
+    <div class="sec-icon ic-orange">🛢️</div>
+    <div class="sec-title tc-orange">Productos</div>
+    <div class="counter">Guardados: <span id="cnt-done">0</span> / <span id="cnt-total">0</span></div>
   </div>
-  <div class="tbl-wrap">
+  <div class="table-wrap">
     <table>
       <thead>
         <tr>
           <th style="width:36px">#</th>
-          <th style="min-width:180px">Producto</th>
-          <th style="min-width:120px">Marca</th>
-          <th style="min-width:130px">Presentación</th>
-          <th style="min-width:110px">Unidad</th>
-          <th style="min-width:90px">Pz / Present.</th>
-          <th style="min-width:140px">Precio Compra (sin IVA)</th>
-          <th style="min-width:148px">Frecuencia / Forecast</th>
-          <th style="width:90px;text-align:center">Guardar</th>
+          <th class="cp" style="min-width:210px">Producto</th>
+          <th class="ci" style="min-width:120px">Marca</th>
+          <th class="ci" style="min-width:110px">Presentación</th>
+          <th class="ci" style="min-width:110px">Unidad</th>
+          <th class="ci" style="min-width:80px">Pz / Present.</th>
+          <th class="ci" style="min-width:115px">Precio Compra <span style="font-weight:400;opacity:.75;text-transform:none;letter-spacing:0">(sin IVA)</span></th>
+          <th class="ci" style="min-width:148px">Frecuencia / Forecast</th>
+          <th style="width:80px;text-align:center">Guardar</th>
         </tr>
       </thead>
       <tbody id="tbody">
@@ -244,21 +272,17 @@ select.ti{cursor:pointer}
   </button>
 </div>
 
-<div class="footer">PROLUB · Captura CEDIS Mérida · <span class="fecha-footer" id="fecha-hoy"></span></div>
-
-<!-- MODAL RESET -->
+<div class="footer">PROLUB · Captura CEDIS Mérida · <span id="fecha-hoy"></span></div>
 <div class="modal-bg" id="modal-bg">
-  <div class="modal">
-    <h3>¿Nuevo cliente?</h3>
-    <p>Se guardarán todos los productos pendientes y se limpiará el formulario para el siguiente cliente.</p>
+  <div class="modal-box">
+    <div class="modal-title">¿Nuevo cliente (Reset)?</div>
+    <div class="modal-sub">Se guardarán <strong>todos los productos pendientes</strong> en la base de datos y se limpiará la pantalla para capturar un nuevo cliente.</div>
     <div class="modal-btns">
-      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn-confirm" onclick="iniciarBarrido()">Sí, guardar y limpiar</button>
+      <button class="modal-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="modal-ok" onclick="iniciarBarrido()">Sí, guardar y continuar</button>
     </div>
   </div>
 </div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <!-- SWEEP OVERLAY -->
@@ -278,434 +302,214 @@ select.ti{cursor:pointer}
 // ─── SUPABASE ──────────────────────────────────────────────────
 const SUPA_URL = 'https://vqhmksletdhbtkeldtmh.supabase.co';
 const SUPA_KEY = 'sb_publishable_aW18t1A4NkwKNDr6leJYHA_K9CwbDZt';
-const {createClient} = supabase;
-const db = createClient(SUPA_URL, SUPA_KEY);
+const {createClient} = supabase; const db = createClient(SUPA_URL, SUPA_KEY);
 
-// ─── CP DATA (embebido, sin API externa) ──────────────────────
-var CP_DATA = {
-  "97000":["Centro","Jesus Carranza","Santa Ana","Garcia Gineres","Emilio Portes Gil","Cordemex"],
-  "97100":["Itzimna","Campestre","Buenavista","Benito Juarez Nte","Poligono 108"],
-  "97105":["Cholul","Santa Rita Cholul"],
-  "97110":["Pedregales de Tanlum","Gran Santa Fe","Santa Rita Cholul","Tanlum"],
-  "97115":["Gran Santa Fe II","Bosques de Merida","Santa Gertrudis Copo"],
-  "97117":["Altabrisa","Chuburna de Hidalgo"],
-  "97118":["Chuburna Inn","Residencial Chuburna"],
-  "97119":["Santa Fe","Montes de Ame","Las Americas"],
-  "97120":["Montejo","Colonia Mexico"],
-  "97125":["Vergel I","Vergel II","Vergel III","Vergel IV"],
-  "97127":["Residencial Pensiones","Pensiones"],
-  "97128":["Pensiones","Residencial Pensiones"],
-  "97129":["Diaz Ordaz","Residencial Pensiones"],
-  "97130":["Inaambrica","Mejorada","La Mejorada"],
-  "97133":["Sambula","Yucalpeten","Las Granjas"],
-  "97134":["San Esteban","Granjas"],
-  "97136":["Emiliano Zapata Sur","Emiliano Zapata Nte"],
-  "97138":["Los Heroes","San Jose Tecoh"],
-  "97139":["Industrial","Cicolsa"],
-  "97140":["Pacabtun","Residencial Pacabtun","Las Palmas"],
-  "97143":["El Roble","Villas del Sur"],
-  "97145":["Caucel","Caucel CTM"],
-  "97146":["Ampliacion Caucel","Flamboyanes"],
-  "97148":["Xoclan","Xoclan Santo"],
-  "97150":["Garcia Gineres","Santa Catalina","Canton Zavala"],
-  "97155":["Santa Rosa","Miraflores","Los Pinos"],
-  "97157":["Real Montejo","Montejo"],
-  "97160":["Fraccionamiento del Parque","Del Parque","Lomas del Sol"],
-  "97170":["Valentin Gomez Farias","Plan de Ayala","Ricardo Flores Magon"],
-  "97173":["La Canada","Bojorquez"],
-  "97174":["Bojorquez","La Canada"],
-  "97175":["Dzitya","Ex Hacienda Dzitya"],
-  "97176":["Dzitya","Komchen"],
-  "97178":["Komchen","Dzitya"],
-  "97180":["Mulsay","Mulsay III Etapa"],
-  "97183":["San Marcos Nocoh","Cinco Colonias"],
-  "97184":["Cinco Colonias","Ciudad Caucel"],
-  "97185":["Texan de Palomeque","Caucel"],
-  "97190":["Heroes de Chapultepec","Esperanza","Solidaridad"],
-  "97200":["Aleman","Salvador Alvarado","Miguel Hidalgo"],
-  "97203":["Chuminopolis","Obrera"],
-  "97204":["Industrial","Aviacion"],
-  "97205":["Aviacion","Industrial"],
-  "97206":["Juan Pablo II","Gran Oriente"],
-  "97207":["Villas del Oriente","Los Almendros"],
-  "97208":["Canaan","Lomas de Merida"],
-  "97209":["Dzununcan","Fraccionamiento Dzununcan"],
-  "97210":["Emiliano Zapata","Emiliano Zapata Nte","Emiliano Zapata Sur"],
-  "97213":["Villas La Hacienda","Hacienda Merida"],
-  "97214":["Hacienda Merida","Villas La Hacienda"],
-  "97215":["San Pedro Nohpat","Nohpat"],
-  "97216":["Nohpat","San Pedro Nohpat"],
-  "97218":["Xcunya","Komchen"],
-  "97219":["San Ignacio Tessip","Tessip"],
-  "97220":["Mexico Oriente","Morelos","Las Flores"],
-  "97225":["Pedregal","Pedregal Oriente"],
-  "97226":["San Jose Oriente","Oriente"],
-  "97229":["Las Brisas","Hacienda"],
-  "97230":["Brisas","Prados de Chuburna"],
-  "97235":["Residencial Brisas","Las Brisas"],
-  "97240":["Francisco de Montejo","Montejo"],
-  "97243":["Ciudad Caucel","Nueva Caucel"],
-  "97250":["Los Almendros","Jardines del Poniente","Merida Poniente"],
-  "97253":["Benito Juarez Ote","Benito Juarez"],
-  "97254":["Benito Juarez Nte","Benito Juarez"],
-  "97260":["Revolucion","San Antonio Xluch","Xluch"],
-  "97264":["Xcumpich","San Antonio Xluch"],
-  "97265":["Xcumpich","Industrial Xcumpich"],
-  "97270":["Melchor Ocampo","Canton Oriente","Las Torres"],
-  "97280":["Vergel","Vergel Poniente","San Marcos"],
-  "97290":["Ciudad Industrial","Lerma","Industrial Merida"],
-  "97295":["Nuevo Merida","Ciudad Industrial"],
-  "97296":["Parque Industrial","Industrial"],
-  "97300":["Kanasin","Centro Kanasin"],
-  "97305":["Cholul","Santa Rita Cholul"],
-  "97306":["Tixcacal","Kanasin"],
-  "97308":["Dzununcan","Kanasin"],
-  "97310":["Uman","Centro Uman"],
-  "97312":["Uman","Ex Hacienda"],
-  "97315":["Uman","Sierra Papacal"],
-  "97316":["Sierra Papacal","Uman"],
-  "97320":["Progreso","Centro Progreso"],
-  "97322":["Progreso","Barrio San Francisco"],
-  "97326":["Chelem","Chuburna Puerto"],
-  "97328":["Chuburna Puerto","Chelem"],
-  "97330":["Telchac Puerto","Telchac"],
-  "97335":["Telchac Pueblo","Centro"],
-  "97340":["Izamal","Centro Izamal"],
-  "97343":["Izamal","Barrio Los Arcos"],
-  "97345":["Hocaba","Centro Hocaba"],
-  "97349":["Sudzal","Centro"],
-  "97350":["Motul","Centro Motul"],
-  "97352":["Motul","Barrio Independencia"],
-  "97354":["Motul","San Juan"],
-  "97356":["Dzilam de Bravo","Centro"],
-  "97358":["Dzilam Gonzalez","Centro"],
-  "97360":["Tizimin","Centro Tizimin"],
-  "97362":["Tizimin","Barrio San Jose"],
-  "97364":["Tizimin","Col Campesina"],
-  "97366":["Tizimin","Barrio San Martin"],
-  "97368":["Panaba","Centro"],
-  "97370":["Valladolid","Centro Valladolid"],
-  "97372":["Valladolid","Barrio San Juan"],
-  "97374":["Valladolid","Barrio Sisal"],
-  "97376":["Valladolid","Barrio Candelaria"],
-  "97378":["Tinum","Centro"],
-  "97380":["Valladolid","Col Mexico"],
-  "97385":["Chemax","Centro Chemax"],
-  "97390":["Espita","Centro Espita"],
-  "97395":["Calotmul","Centro"],
-  "97400":["Ticul","Centro Ticul"],
-  "97402":["Ticul","Barrio San Juan"],
-  "97404":["Ticul","Barrio La Ermita"],
-  "97420":["Muna","Centro Muna"],
-  "97425":["Muna","Barrio San Francisco"],
-  "97430":["Oxkutzcab","Centro Oxkutzcab"],
-  "97432":["Oxkutzcab","Barrio San Roman"],
-  "97435":["Tekax","Barrio San Antonio"],
-  "97438":["Tzucacab","Centro"],
-  "97440":["Tekax","Centro Tekax"],
-  "97442":["Tekax","Barrio San Juan"],
-  "97445":["Peto","Barrio San Juan"],
-  "97450":["Akil","Centro Akil"],
-  "97460":["Maní","Centro Mani"],
-  "97465":["Teabo","Centro Teabo"],
-  "97470":["Peto","Centro Peto"],
-  "97472":["Peto","Barrio San Francisco"],
-  "97480":["Tzucacab","Barrio Centro"],
-  "97490":["Jose Maria Morelos","Centro"],
-  "97500":["Merida","Merida Sur"],
-  "97505":["Kanasin","Col Jardines"],
-  "97510":["Kanasin","Barrio San Isidro"],
-  "97515":["Kanasin","San Jose"],
-  "97520":["Kanasin","Col Mexico"],
-  "97530":["Uman","Col Campestre"],
-  "97540":["Tizimin","Col Revolucion"],
-  "97550":["Tizimin","Col Deportiva"],
-  "97600":["Progreso","Col Residencial"],
-  "97605":["Progreso","Barrio La Ermita"],
-  "97612":["Telchac Puerto","Barrio Centro"],
-  "97615":["Chuburna Puerto","Fraccionamiento"],
-  "97700":["Ticul","Col Industrial"],
-  "97720":["Oxkutzcab","Col Nueva"],
-  "97730":["Tekax","Col Campesina"],
-  "97800":["Izamal","Col Nueva"],
-  "97805":["Izamal","Barrio San Pablo"],
-  "97820":["Motul","Col Sta Maria"],
-  "97830":["Motul","Col Primero de Mayo"],
-  "97840":["Temax","Centro Temax"],
-  "97843":["Temax","Barrio"],
-  "97845":["Buctzotz","Centro"],
-  "97848":["Dzilam Gonzalez","Barrio"],
-  "97850":["Dzidzantun","Centro"],
-  "97853":["Dzidzantun","Barrio San Jose"],
-  "97856":["Dzidzantun","Barrio La Ermita"],
-  "97860":["Dzidzantun","Centro Dzidzantun","Barrio San Pedro"],
-  "97863":["Dzidzantun","Barrio Norte"],
-  "97865":["Dzemul","Centro"],
-  "97868":["Chicxulub Pueblo","Centro"],
-  "97870":["Buctzotz","Barrio Centro"],
-  "97900":["Hunucma","Centro Hunucma"],
-  "97903":["Hunucma","Barrio San Francisco"],
-  "97906":["Hunucma","Barrio San Mateo"],
-  "97910":["Hunucma","Col Campesina"],
-  "97920":["Uman","Barrio San Juan"],
-  "97930":["Uman","Frac Industrial"],
-  "97940":["Uman","Ex Hacienda Blanca Flor"],
-  "97950":["Tetiz","Centro Tetiz"],
-  "97953":["Tetiz","Barrio"],
-  "97960":["Kinchil","Centro Kinchil"],
-  "97963":["Kinchil","Barrio"],
-  "97970":["Celestun","Centro Celestun"],
-  "97973":["Celestun","Barrio San Roman"],
-  "97980":["Sisal","Centro Sisal"],
-  "97990":["Hunucma","San Ignacio"]
-};
+// ─── CP → COLONIAS (API gratuita sepomex) ──────────────────────
 
-var CIUDAD_DATA = {
-  "97000":"Merida","97100":"Merida","97105":"Merida","97110":"Merida",
-  "97115":"Merida","97117":"Merida","97118":"Merida","97119":"Merida",
-  "97120":"Merida","97125":"Merida","97127":"Merida","97128":"Merida",
-  "97129":"Merida","97130":"Merida","97133":"Merida","97134":"Merida",
-  "97136":"Merida","97138":"Merida","97139":"Merida","97140":"Merida",
-  "97143":"Merida","97145":"Merida","97146":"Merida","97148":"Merida",
-  "97150":"Merida","97155":"Merida","97157":"Merida","97160":"Merida",
-  "97170":"Merida","97173":"Merida","97174":"Merida","97175":"Merida",
-  "97176":"Merida","97178":"Merida","97180":"Merida","97183":"Merida",
-  "97184":"Merida","97185":"Merida","97190":"Merida","97200":"Merida",
-  "97203":"Merida","97204":"Merida","97205":"Merida","97206":"Merida",
-  "97207":"Merida","97208":"Merida","97209":"Merida","97210":"Merida",
-  "97213":"Merida","97214":"Merida","97215":"Merida","97216":"Merida",
-  "97218":"Merida","97219":"Merida","97220":"Merida","97225":"Merida",
-  "97226":"Merida","97229":"Merida","97230":"Merida","97235":"Merida",
-  "97240":"Merida","97243":"Merida","97250":"Merida","97253":"Merida",
-  "97254":"Merida","97260":"Merida","97264":"Merida","97265":"Merida",
-  "97270":"Merida","97280":"Merida","97290":"Merida","97295":"Merida",
-  "97296":"Merida","97300":"Kanasin","97305":"Merida","97306":"Kanasin",
-  "97308":"Kanasin","97310":"Uman","97312":"Uman","97315":"Uman",
-  "97316":"Sierra Papacal","97320":"Progreso","97322":"Progreso",
-  "97326":"Progreso","97328":"Progreso","97330":"Telchac Puerto",
-  "97335":"Telchac Pueblo","97340":"Izamal","97343":"Izamal",
-  "97345":"Hocaba","97349":"Sudzal","97350":"Motul","97352":"Motul",
-  "97354":"Motul","97356":"Dzilam de Bravo","97358":"Dzilam Gonzalez",
-  "97360":"Tizimin","97362":"Tizimin","97364":"Tizimin","97366":"Tizimin",
-  "97368":"Panaba","97370":"Valladolid","97372":"Valladolid",
-  "97374":"Valladolid","97376":"Valladolid","97378":"Tinum",
-  "97380":"Valladolid","97385":"Chemax","97390":"Espita","97395":"Calotmul",
-  "97400":"Ticul","97402":"Ticul","97404":"Ticul","97420":"Muna",
-  "97425":"Muna","97430":"Oxkutzcab","97432":"Oxkutzcab","97435":"Tekax",
-  "97438":"Tzucacab","97440":"Tekax","97442":"Tekax","97445":"Peto",
-  "97450":"Akil","97460":"Mani","97465":"Teabo","97470":"Peto",
-  "97472":"Peto","97480":"Tzucacab","97490":"Jose Maria Morelos",
-  "97500":"Kanasin","97505":"Kanasin","97510":"Kanasin","97515":"Kanasin",
-  "97520":"Kanasin","97530":"Uman","97540":"Tizimin","97550":"Tizimin",
-  "97600":"Progreso","97605":"Progreso","97612":"Telchac Puerto",
-  "97615":"Progreso","97700":"Ticul","97720":"Oxkutzcab","97730":"Tekax",
-  "97800":"Izamal","97805":"Izamal","97820":"Motul","97830":"Motul",
-  "97840":"Temax","97843":"Temax","97845":"Buctzotz","97848":"Dzilam Gonzalez",
-  "97850":"Dzidzantun","97853":"Dzidzantun","97856":"Dzidzantun",
-  "97860":"Dzidzantun","97863":"Dzidzantun","97865":"Dzemul",
-  "97868":"Chicxulub Pueblo","97870":"Buctzotz","97900":"Hunucma",
-  "97903":"Hunucma","97906":"Hunucma","97910":"Hunucma","97920":"Uman",
-  "97930":"Uman","97940":"Uman","97950":"Tetiz","97953":"Tetiz",
-  "97960":"Kinchil","97963":"Kinchil","97970":"Celestun","97973":"Celestun",
-  "97980":"Sisal","97990":"Hunucma"
-};
 
-function buscarColonias(cp) {
-  var sel = document.getElementById('cli-colonia');
-  var ciudad = document.getElementById('cli-ciudad');
-  if (!sel || !ciudad) return;
-  var cpStr = String(cp).trim();
-  if (cpStr.length < 5) {
-    sel.innerHTML = '<option value="">Ingresa CP primero...</option>';
-    ciudad.value = '';
-    return;
-  }
-  var colonias = CP_DATA[cpStr];
-  if (colonias && colonias.length > 0) {
-    sel.innerHTML = '';
-    for (var i = 0; i < colonias.length; i++) {
-      var opt = document.createElement('option');
-      opt.value = colonias[i];
-      opt.textContent = colonias[i];
-      if (i === 0) opt.selected = true;
-      sel.appendChild(opt);
-    }
-    ciudad.value = CIUDAD_DATA[cpStr] || 'Merida';
-  } else {
-    sel.innerHTML = '<option value="Otra colonia">Otra colonia</option>';
-    ciudad.value = '';
-  }
-}
-
-function toggleGiroOtro(val) {
-  var el = document.getElementById('cli-giro-otro');
-  if (el) el.style.display = val === 'Otro' ? 'block' : 'none';
-}
-
-function getGiro() {
-  var sel = document.getElementById('cli-giro').value;
-  if (sel === 'Otro') {
-    var otro = document.getElementById('cli-giro-otro').value.trim();
-    return otro || 'Otro';
-  }
-  return sel;
-}
-var _cpPrev = '';
-setInterval(function() {
-  var el = document.getElementById('cli-cp');
-  if (el && el.value !== _cpPrev) {
-    _cpPrev = el.value;
-    if (el.value.length === 5) buscarColonias(el.value);
-  }
-}, 400);
-
-// ─── CONEXION SUPABASE ────────────────────────────────────────
-async function cargarStats() {
-  try {
-    var r = await db.from('merida_registros').select('id, cliente_nombre');
-    if (r.error) throw r.error;
-    var datos = r.data || [];
-    var totalProds = datos.length;
-    var clientes = new Set(datos.map(function(d){ return d.cliente_nombre; })).size;
-    document.getElementById('global-stats').textContent = clientes + ' clientes · ' + totalProds + ' productos';
-  } catch(e) {
-    document.getElementById('global-stats').textContent = 'sin datos';
-  }
-}
 
 async function testConn() {
   try {
-    var r = await db.from('merida_registros').select('id').limit(1);
-    if (r.error) throw r.error;
+    const { error } = await db.from('merida_registros').select('id').limit(1);
+    if (error) throw error;
     document.getElementById('db-dot').className = 'db-dot ok';
-    document.getElementById('db-label').textContent = 'conectado';
-    cargarStats();
+    document.getElementById('db-txt').textContent = 'base de datos ✓';
   } catch(e) {
     document.getElementById('db-dot').className = 'db-dot err';
-    document.getElementById('db-label').textContent = 'sin conexion';
+    document.getElementById('db-txt').textContent = 'sin conexión';
   }
 }
 
-// ─── CONTADOR ─────────────────────────────────────────────────
-var totalGuardados = 0;
-var totalFilas = 0;
-function actualizarContador() {
-  document.getElementById('pn').textContent = totalGuardados;
-  document.getElementById('pt2').textContent = totalFilas;
-  var pct = totalFilas > 0 ? (totalGuardados / totalFilas * 100) : 0;
-  document.getElementById('pf').style.width = pct + '%';
+// ─── VARS ──────────────────────────────────────────────────────
+const FREQ = ['','Diaria','Semanal','Quincenal','Mensual','Bimestral','Trimestral','Semestral','Anual'];
+let rc = 0;
+
+function mkopts(arr) {
+  return arr.map(v => `<option value="${v}">${v || 'Seleccionar...'}</option>`).join('');
 }
 
-// ─── FILAS ────────────────────────────────────────────────────
-var rowCount = 0;
+// ─── ADD ROW ───────────────────────────────────────────────────
 function addRow() {
-  var empty = document.getElementById('empty-row');
-  if (empty) empty.remove();
-  rowCount++;
-  totalFilas++;
-  actualizarContador();
-  var i = rowCount;
-  var tr = document.createElement('tr');
+  const er = document.getElementById('empty-row');
+  if (er) er.remove();
+
+  const i = rc++;
+  const tbody = document.getElementById('tbody');
+  const tr = document.createElement('tr');
   tr.id = 'r' + i;
   tr.dataset.idx = i;
+  tr.style.opacity = '0';
+  tr.style.transform = 'translateY(-5px)';
+
   tr.innerHTML =
-    '<td class="num-cell">' + i + '</td>' +
-    '<td><input class="ti" id="p' + i + '" type="text" placeholder="Nombre del producto..." oninput="chk(' + i + ')"></td>' +
-    '<td><input class="ti" id="m' + i + '" type="text" placeholder="Marca..." oninput="chk(' + i + ')"></td>' +
-    '<td><input class="ti" id="pr' + i + '" type="text" placeholder="Ej: Cubeta 19L" oninput="chk(' + i + ')"></td>' +
-    '<td><select class="ti" id="u' + i + '" onchange="chk(' + i + ')">' +
-      '<option value="">-- Unidad --</option>' +
-      '<option>Lt</option><option>Kg</option>' +
-      '<option>Cont 1,000 Lt</option><option>Tambo 200 Lt</option>' +
-      '<option>Cub 19 Lt</option><option>Galon</option><option>Pieza</option>' +
+    '<td><span style="font-family:var(--mono);font-size:.6rem;color:var(--muted)" id="rn' + i + '"></span></td>' +
+    '<td><input class="ti" id="p' + i + '" type="text" placeholder="Nombre del producto..." oninput="chk(' + i + ')" style="min-width:190px"></td>' +
+    '<td><input class="ti" id="m' + i + '" type="text" placeholder="Ej: PROLUB..." oninput="chk(' + i + ')" style="min-width:105px"></td>' +
+    '<td><input class="ti" id="pr' + i + '" type="text" placeholder="Ej: 19L, 24x1L..." oninput="chk(' + i + ')" style="min-width:95px"></td>' +
+    '<td><select class="ts" id="un' + i + '" onchange="chk(' + i + ')" style="min-width:105px">' +
+      '<option value="">Unidad...</option>' +
+      '<option>Lt</option>' +
+      '<option>Kg</option>' +
+      '<option>Cont 1,000 Lt</option>' +
+      '<option>Tambo 200 Lt</option>' +
+      '<option>Cub 19 Lt</option>' +
+      '<option>Galón</option>' +
+      '<option>Pieza</option>' +
     '</select></td>' +
-    '<td><input class="ti" id="pz' + i + '" type="number" min="1" placeholder="1" oninput="chk(' + i + ')" style="width:70px"></td>' +
-    '<td><div style="display:flex;align-items:center;gap:4px"><span style="font-size:.82rem;color:var(--muted);font-weight:700">$</span><input class="ti" id="pc' + i + '" type="number" min="0" step="0.01" placeholder="0.00" oninput="chk(' + i + ')" style="width:100px"></div></td>' +
-    '<td><select class="ti" id="f' + i + '" onchange="chk(' + i + ')">' +
-      '<option value="">-- Frecuencia --</option>' +
-      '<option>Diario</option>' +
-      '<option>Semanal</option>' +
-      '<option>Quincenal</option>' +
-      '<option>Mensual</option>' +
-      '<option>Bimestral</option>' +
-      '<option>Trimestral</option>' +
-      '<option>Semestral</option>' +
-      '<option>Anual</option>' +
-    '</select></td>' +
-    '<td style="text-align:center;white-space:nowrap">' +
-      '<button class="btn-save" id="sb' + i + '" onclick="guardarFila(' + i + ')" disabled>Guardar</button> ' +
-      '<button class="btn-del" onclick="intentoBorrar(' + i + ')">🗑</button>' +
+    '<td><input class="ti" id="pz' + i + '" type="number" min="0" placeholder="Ej: 24" oninput="chk(' + i + ')" style="min-width:65px"></td>' +
+    '<td><input class="ti" id="pc' + i + '" type="text" inputmode="decimal" placeholder="$0.00" oninput="chk(' + i + ')" onfocus="focusPrecio(this)" onblur="fmtPrecio(this,' + i + ')" style="min-width:90px"></td>' +
+    '<td><select class="ts" id="f' + i + '" onchange="chk(' + i + ')">' + mkopts(FREQ) + '</select></td>' +
+    '<td style="text-align:center">' +
+      '<div style="display:flex;align-items:center;justify-content:center;gap:5px">' +
+        '<div class="sdot" id="d' + i + '"></div>' +
+        '<button class="btn-save-row" id="sb' + i + '" onclick="guardarFila(' + i + ')">Guardar</button>' +
+        '<button class="btn-del-row" id="del' + i + '" onclick="intentoBorrar(' + i + ')" style="display:none" title="Eliminar">🗑</button>' +
+      '</div>' +
     '</td>';
-  document.getElementById('tbody').appendChild(tr);
+
+  tbody.appendChild(tr);
+  requestAnimationFrame(function() {
+    tr.style.transition = 'all .22s ease';
+    tr.style.opacity = '1';
+    tr.style.transform = 'translateY(0)';
+  });
+  renum();
+  upd();
+  document.getElementById('p' + i).focus();
 }
 
+// ─── PRECIO FORMAT ─────────────────────────────────────────────
+function focusPrecio(el) {
+  var raw = el.value.replace(/[^0-9.]/g, '');
+  el.value = raw || '';
+}
+
+function fmtPrecio(el, i) {
+  var raw = el.value.replace(/[^0-9.]/g, '');
+  var n = parseFloat(raw);
+  el.value = isNaN(n) ? '' : '$' + n.toFixed(2);
+  chk(i);
+}
+
+// ─── CHECK ROW ─────────────────────────────────────────────────
 function chk(i) {
-  var prod = (document.getElementById('p' + i) ? document.getElementById('p' + i).value : '').trim();
-  var sb = document.getElementById('sb' + i);
-  if (sb) sb.disabled = prod.length < 2;
+  var ids = ['p'+i,'m'+i,'pr'+i,'pz'+i,'pc'+i,'f'+i];
+  var filled = true;
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) { filled = false; return; }
+    var hasVal = !!el.value;
+    el.classList.toggle('ok', hasVal);
+    if (!hasVal) filled = false;
+  });
+  var r = document.getElementById('r'+i);
+  var d = document.getElementById('d'+i);
+  var sb = document.getElementById('sb'+i);
+  if (!r) return;
+  r.classList.toggle('done', filled);
+  if (d) d.classList.toggle('on', filled);
+  upd();
 }
 
-// ─── GUARDAR FILA ─────────────────────────────────────────────
+// ─── GUARDAR FILA EN SUPABASE ──────────────────────────────────
 async function guardarFila(i) {
   var nombre  = document.getElementById('cli-nombre').value.trim();
-  var dir     = document.getElementById('cli-dir').value.trim();
+  var calle   = document.getElementById('cli-calle').value.trim();
+  var cp      = document.getElementById('cli-cp').value.trim();
   var colonia = document.getElementById('cli-colonia').value;
   var ciudad  = document.getElementById('cli-ciudad').value.trim();
-  var giro    = getGiro();
-  var cp      = document.getElementById('cli-cp').value.trim();
+  var giro    = document.getElementById('cli-giro').value;
+  var dir     = [calle, colonia, cp, ciudad].filter(Boolean).join(', ');
 
-  var prod    = document.getElementById('p' + i) ? document.getElementById('p' + i).value.trim() : '';
-  var marca   = document.getElementById('m' + i) ? document.getElementById('m' + i).value.trim() : '';
-  var pres    = document.getElementById('pr' + i) ? document.getElementById('pr' + i).value.trim() : '';
-  var unidad  = document.getElementById('u' + i) ? document.getElementById('u' + i).value : '';
-  var pz      = document.getElementById('pz' + i) ? document.getElementById('pz' + i).value : '';
-  var precio  = document.getElementById('pc' + i) ? document.getElementById('pc' + i).value : '';
-  var frec    = document.getElementById('f' + i) ? document.getElementById('f' + i).value.trim() : '';
+  var prod   = (document.getElementById('p'+i)?.value || '').trim();
+  var marca  = document.getElementById('m'+i)?.value || '';
+  var pres   = document.getElementById('pr'+i)?.value || '';
+  var unidad = document.getElementById('un'+i)?.value || '';
+  var pz     = document.getElementById('pz'+i)?.value || '';
+  var precio = document.getElementById('pc'+i)?.value || '';
+  var freq   = document.getElementById('f'+i)?.value || '';
 
-  var dir_completa = (dir ? dir + ', ' : '') + (colonia ? colonia + ', ' : '') + (ciudad ? ciudad : '') + (cp ? ' CP ' + cp : '');
+  if (!prod || !marca || !pres || !pz || !precio || !freq) {
+    toast('⚠ Completa todos los campos de la fila', 'warn');
+    return;
+  }
+  if (!nombre) { toast('⚠ Escribe el nombre del cliente primero', 'warn'); return; }
 
-  var sb = document.getElementById('sb' + i);
-  if (sb) { sb.disabled = true; sb.textContent = 'Guardando...'; }
+  var sb = document.getElementById('sb'+i);
+  sb.disabled = true;
+  sb.textContent = 'Guardando...';
+
+  var rec = {
+    cliente_nombre: nombre,
+    cliente_dir: dir,
+    cliente_giro: giro,
+    producto: prod,
+    marca: marca,
+    presentacion: pres,
+    unidad: unidad,
+    pz_presentacion: pz,
+    precio_compra: precio,
+    frecuencia: freq,
+    fecha_captura: new Date().toISOString()
+  };
 
   try {
-    var r = await db.from('merida_registros').insert({
-      cliente_nombre: nombre || '(sin nombre)',
-      cliente_dir:    dir_completa,
-      cliente_giro:   giro,
-      producto:       prod,
-      marca:          marca,
-      presentacion:   pres,
-      unidad:         unidad,
-      pz_presentacion: pz,
-      precio_compra:  precio,
-      frecuencia:     frec
-    });
-    if (r.error) throw r.error;
+    var res = await db.from('merida_registros').insert(rec);
+    if (res.error) throw res.error;
 
-    // Marcar como guardado
-    ['p','m','pr','u','pz','pc','f'].forEach(function(k) {
-      var el = document.getElementById(k + i);
-      if (el) { el.disabled = true; el.classList.add('saved-input'); }
+    // Bloquear fila — ya guardada, no se puede editar ni borrar
+    ['p','m','pr','un','pz','pc','f'].forEach(function(k) {
+      var el = document.getElementById(k+i);
+      if (el) { el.readOnly = true; el.disabled = true; el.style.opacity = '.75'; }
     });
-    if (sb) { sb.textContent = '✓ Guardado'; sb.style.background = 'var(--green)'; }
-    var row = document.getElementById('r' + i);
-    if (row) row.classList.add('saved');
-
-    totalGuardados++;
-    actualizarContador();
-    cargarStats();
-    toast('✅ Producto guardado correctamente', 'ok');
+    var r = document.getElementById('r'+i);
+    if (r) r.classList.add('saved');
+    sb.textContent = '✓ Guardado';
+    sb.style.background = 'var(--green)';
+    var d = document.getElementById('d'+i);
+    if (d) { d.classList.add('on'); }
+    // Mostrar botón de borrar (solo visual — va a tabla admin)
+    var delBtn = document.getElementById('del'+i);
+    if (delBtn) delBtn.style.display = 'inline-flex';
+    toast('✓ Producto guardado correctamente', 'ok');
+    upd();
   } catch(e) {
-    if (sb) { sb.disabled = false; sb.textContent = 'Guardar'; }
-    toast('❌ Error al guardar: ' + e.message, 'err');
+    sb.disabled = false;
+    sb.textContent = 'Guardar';
+    toast('Error al guardar: ' + e.message, 'err');
   }
 }
 
-// ─── INTENTO BORRAR (silencioso) ──────────────────────────────
+// ─── RENUM / UPD ──────────────────────────────────────────────
+function renum() {
+  var n = 1;
+  document.querySelectorAll('#tbody tr[data-idx]').forEach(function(r) {
+    var el = document.getElementById('rn' + r.dataset.idx);
+    if (el) el.textContent = String(n++).padStart(2, '0');
+  });
+}
+
+function upd() {
+  var total = document.querySelectorAll('#tbody tr[data-idx]').length;
+  var done  = document.querySelectorAll('#tbody tr.saved').length;
+  ['cnt-done','pn'].forEach(function(id) { document.getElementById(id).textContent = done; });
+  ['cnt-total','pt2'].forEach(function(id) { document.getElementById(id).textContent = total; });
+  document.getElementById('pf').style.width = total ? (done / total * 100) + '%' : '0%';
+}
+
+// ─── INTENTO DE BORRADO → tabla admin oculta ───────────────────
 async function intentoBorrar(i) {
   var nombre = document.getElementById('cli-nombre').value.trim();
-  var prod   = document.getElementById('p' + i) ? document.getElementById('p' + i).value.trim() : '';
-  var marca  = document.getElementById('m' + i) ? document.getElementById('m' + i).value.trim() : '';
+  var prod   = (document.getElementById('p'+i)?.value || document.getElementById('sb'+i)?.dataset?.prod || '').trim();
+  var marca  = '';
+  // Intentar leer los valores aunque estén disabled
+  ['p','m','pr','pz','pc','f'].forEach(function(k) {
+    var el = document.getElementById(k+i);
+    if (el && k==='p') prod  = el.value || prod;
+    if (el && k==='m') marca = el.value || marca;
+  });
+
+  // Registrar intento silenciosamente en tabla admin
   try {
     await db.from('merida_intentos_borrado').insert({
       cliente_nombre: nombre || '(sin nombre)',
@@ -715,145 +519,249 @@ async function intentoBorrar(i) {
       fecha_intento: new Date().toISOString(),
       user_agent: navigator.userAgent.substring(0, 120)
     });
-  } catch(e) {}
-  var r = document.getElementById('r' + i);
+  } catch(e) { /* silencioso — el usuario no sabe que se registró */ }
+
+  // Feedback visual — simular que "se eliminó" pero en realidad no pasa nada
+  var r = document.getElementById('r'+i);
   if (r) {
-    r.style.transition = 'all .4s';
+    r.style.transition = 'all .4s ease';
     r.style.opacity = '0.3';
     setTimeout(function() {
       r.style.opacity = '1';
-      toast('Los productos guardados no se pueden eliminar', 'warn');
+      toast('⚠ Los productos guardados no se pueden eliminar', 'warn');
     }, 400);
   }
 }
 
-// ─── KARDEX CSV ───────────────────────────────────────────────
+// ─── KARDEX EXCEL (lee directo de Supabase — incluye clientes anteriores) ────
 async function descargarKardex() {
-  var nombre  = document.getElementById('cli-nombre').value.trim() || 'Sin nombre';
-  var dir     = document.getElementById('cli-dir').value.trim() || '';
-  var giro    = document.getElementById('cli-giro').value || '';
-  var fecha   = new Date().toLocaleDateString('es-MX', {year:'numeric',month:'long',day:'numeric'});
-
-  toast('Descargando kardex...', 'ok');
-
+  toast('⏳ Generando Kardex...', 'warn');
   try {
-    var r = await db.from('merida_registros').select('*').order('fecha_captura', {ascending: false});
-    if (r.error) throw r.error;
-    var datos = r.data || [];
-    if (datos.length === 0) { toast('No hay registros en la base de datos', 'warn'); return; }
+    var res = await db.from('merida_registros').select('*').order('fecha_captura', { ascending: false });
+    if (res.error) throw res.error;
+    var data = res.data;
+    if (!data || !data.length) {
+      toast('⚠ No hay registros guardados aún', 'warn');
+      return;
+    }
 
+    var fecha = new Date().toLocaleDateString('es-MX', {year:'numeric',month:'long',day:'numeric'});
     var lines = [];
-    lines.push('"#","Cliente","Direccion","Giro","Producto","Marca","Presentacion","Unidad","Pz/Present.","Precio Compra","Frecuencia","Fecha","Hora (Merida)"');
-    datos.forEach(function(d, idx) {
-      var fechaCorta = '', horaCorta = '';
-      if (d.fecha_captura) {
-        var dt = new Date(d.fecha_captura);
-        fechaCorta = dt.toLocaleDateString('es-MX', {day:'2-digit', month:'2-digit', year:'numeric', timeZone:'America/Merida'});
-        horaCorta = dt.toLocaleTimeString('es-MX', {hour:'2-digit', minute:'2-digit', hour12:true, timeZone:'America/Merida'});
-      }
+    lines.push('"PROLUB · CEDIS MÉRIDA — KARDEX DE CAPTURA"');
+    lines.push('"Generado:","' + fecha + '"');
+    lines.push('"Total registros:","' + data.length + '"');
+    lines.push('');
+    lines.push(['"#"','"Cliente"','"Dirección"','"Giro"','"Producto"','"Marca"','"Presentación"','"Unidad"','"Pz / Present."','"Precio Compra (sin IVA)"','"Frecuencia / Forecast"','"Fecha Captura"'].join(','));
+
+    data.forEach(function(r, idx) {
       lines.push([
-        idx + 1,
-        '"' + (d.cliente_nombre || '') + '"',
-        '"' + (d.cliente_dir || '') + '"',
-        '"' + (d.cliente_giro || '') + '"',
-        '"' + (d.producto || '') + '"',
-        '"' + (d.marca || '') + '"',
-        '"' + (d.presentacion || '') + '"',
-        '"' + (d.unidad || '') + '"',
-        '"' + (d.pz_presentacion || '') + '"',
-        '"' + (d.precio_compra || '') + '"',
-        '"' + (d.frecuencia || '') + '"',
-        '"' + fechaCorta + '"',
-        '"' + horaCorta + '"'
+        '"'+(idx+1)+'"',
+        '"'+(r.cliente_nombre||'')+'"',
+        '"'+(r.cliente_dir||'')+'"',
+        '"'+(r.cliente_giro||'')+'"',
+        '"'+(r.producto||'')+'"',
+        '"'+(r.marca||'')+'"',
+        '"'+(r.presentacion||'')+'"',
+        '"'+(r.unidad||'')+'"',
+        '"'+(r.pz_presentacion||'')+'"',
+        '"'+(r.precio_compra||'')+'"',
+        '"'+(r.frecuencia||'')+'"',
+        '"'+(r.fecha_captura ? new Date(r.fecha_captura).toLocaleDateString('es-MX') : '')+'"'
       ].join(','));
     });
 
-    var csv = '\uFEFF' + lines.join('\n');
-    var blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'kardex-prolub-merida-' + new Date().toISOString().slice(0,10) + '.csv';
+    var csv  = '\uFEFF' + lines.join('\n');
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    var a    = document.createElement('a');
+    a.href   = URL.createObjectURL(blob);
+    a.download = 'kardex-merida-' + new Date().toISOString().slice(0,10) + '.csv';
     a.click();
-    toast('Kardex descargado (' + datos.length + ' registros)', 'ok');
+    toast('✓ Kardex descargado — ' + data.length + ' registros', 'ok');
   } catch(e) {
-    toast('Error al descargar kardex: ' + e.message, 'err');
+    toast('Error al generar Kardex: ' + e.message, 'err');
   }
 }
 
-// ─── MODAL Y BARRIDO ──────────────────────────────────────────
-function abrirModal() {
-  document.getElementById('modal-bg').classList.add('show');
+// ─── TOAST ─────────────────────────────────────────────────────
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type==='ok' ? '#22c55e' : type==='warn' ? '#f59e0b' : '#ef4444';
+  t.style.color = '#fff';
+  t.style.transform = 'translateY(0)';
+  t.style.opacity = '1';
+  setTimeout(function() { t.style.transform = 'translateY(60px)'; t.style.opacity = '0'; }, 3200);
 }
-function cerrarModal() {
-  document.getElementById('modal-bg').classList.remove('show');
+
+// ─── INIT ──────────────────────────────────────────────────────
+function abrirModal(){
+  // Contar filas pendientes
+  var pendientes = contarPendientes();
+  var sub = document.querySelector('.modal-sub');
+  if (pendientes > 0) {
+    sub.innerHTML = 'Se guardarán <strong>' + pendientes + ' producto(s) pendiente(s)</strong> en la base de datos y se limpiará la pantalla para capturar un nuevo cliente.';
+  } else {
+    sub.innerHTML = 'No hay productos pendientes. Se limpiará la pantalla para capturar un nuevo cliente.';
+  }
+  document.getElementById('modal-bg').classList.add('open');
+}
+function cerrarModal(){document.getElementById('modal-bg').classList.remove('open');}
+
+function contarPendientes() {
+  var count = 0;
+  document.querySelectorAll('#tbody tr[data-idx]').forEach(function(r) {
+    if (!r.classList.contains('saved')) count++;
+  });
+  return count;
 }
 
 async function iniciarBarrido() {
   cerrarModal();
-  var rows = document.querySelectorAll('#tbody tr:not(#empty-row)');
-  var pendientes = [];
-  rows.forEach(function(r) {
-    var idx = r.dataset.idx;
-    if (!r.classList.contains('saved')) {
-      var prod = document.getElementById('p' + idx);
-      if (prod && prod.value.trim().length > 0) pendientes.push(idx);
-    }
+
+  // Recopilar todas las filas NO guardadas
+  var nombre  = document.getElementById('cli-nombre').value.trim();
+  var calle   = document.getElementById('cli-calle').value.trim();
+  var cp      = document.getElementById('cli-cp').value.trim();
+  var colonia = document.getElementById('cli-colonia').value;
+  var ciudad  = document.getElementById('cli-ciudad').value.trim();
+  var giro    = document.getElementById('cli-giro').value;
+  var dir     = [calle, colonia, cp, ciudad].filter(Boolean).join(', ');
+
+  var filas = [];
+  document.querySelectorAll('#tbody tr[data-idx]').forEach(function(r) {
+    if (r.classList.contains('saved')) return; // ya guardada
+    var i = r.dataset.idx;
+    var prod  = (document.getElementById('p'+i)?.value || '').trim();
+    var marca = (document.getElementById('m'+i)?.value || '').trim();
+    var pres  = (document.getElementById('pr'+i)?.value || '').trim();
+    var unidad= (document.getElementById('un'+i)?.value || '').trim();
+    var pz    = (document.getElementById('pz'+i)?.value || '').trim();
+    var precio= (document.getElementById('pc'+i)?.value || '').trim();
+    var freq  = (document.getElementById('f'+i)?.value || '').trim();
+    filas.push({ i, prod, marca, pres, unidad, pz, precio, freq });
   });
 
-  if (pendientes.length === 0) { finalizarBarrido(); return; }
-
-  var overlay = document.getElementById('sweep-overlay');
-  overlay.classList.add('show');
-  document.getElementById('sweep-bar').style.width = '0%';
-  document.getElementById('sweep-rows').innerHTML = '';
-  document.getElementById('sweep-done-msg').style.display = 'none';
-  document.getElementById('btn-sweep-next').style.display = 'none';
-
-  for (var k = 0; k < pendientes.length; k++) {
-    var idx = pendientes[k];
-    document.getElementById('sweep-counter').textContent = (k + 1) + ' / ' + pendientes.length;
-    document.getElementById('sweep-bar').style.width = ((k + 1) / pendientes.length * 100) + '%';
-    var prod = document.getElementById('p' + idx);
-    var rowEl = document.createElement('div');
-    rowEl.textContent = (k + 1) + '. ' + (prod ? prod.value : '');
-    document.getElementById('sweep-rows').appendChild(rowEl);
-    await guardarFila(idx);
-    await new Promise(function(res) { setTimeout(res, 300); });
+  // Si no hay nada pendiente, solo limpiar
+  if (filas.length === 0) {
+    limpiarPantalla();
+    toast('✓ Listo para nuevo cliente', 'ok');
+    return;
   }
 
-  document.getElementById('sweep-done-msg').style.display = 'block';
-  document.getElementById('btn-sweep-next').style.display = 'inline-block';
+  // Mostrar overlay de barrido
+  var overlay  = document.getElementById('sweep-overlay');
+  var rowsEl   = document.getElementById('sweep-rows');
+  var barEl    = document.getElementById('sweep-bar');
+  var counterEl= document.getElementById('sweep-counter');
+  var doneMsg  = document.getElementById('sweep-done-msg');
+  var btnNext  = document.getElementById('btn-sweep-next');
+  var titleEl  = document.getElementById('sweep-title');
+  var subEl    = document.getElementById('sweep-sub');
+
+  // Reset
+  rowsEl.innerHTML = '';
+  barEl.style.width = '0%';
+  doneMsg.style.display = 'none';
+  btnNext.style.display = 'none';
+  titleEl.textContent = '💾 Guardando productos...';
+  subEl.textContent = 'Registrando productos de: ' + (nombre || 'Cliente sin nombre');
+  overlay.classList.add('open');
+
+  // Crear filas visuales
+  var rowEls = {};
+  filas.forEach(function(f, idx) {
+    var div = document.createElement('div');
+    div.className = 'sweep-row';
+    div.id = 'sw-' + f.i;
+    div.innerHTML =
+      '<span class="sweep-icon">⏳</span>' +
+      '<span class="sweep-name">' + (f.prod || '(sin nombre)') + '</span>' +
+      '<span class="sweep-status">Pendiente</span>';
+    rowsEl.appendChild(div);
+    rowEls[f.i] = div;
+  });
+
+  // Guardar una por una con animación
+  var ok = 0, errors = 0;
+  for (var idx = 0; idx < filas.length; idx++) {
+    var f = filas[idx];
+    var el = rowEls[f.i];
+
+    // Animar como "guardando"
+    el.className = 'sweep-row saving';
+    el.querySelector('.sweep-icon').textContent = '🔄';
+    el.querySelector('.sweep-status').textContent = 'Guardando...';
+    el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+    counterEl.textContent = (idx + 1) + ' de ' + filas.length + ' productos';
+
+    // Validar campos mínimos
+    if (!f.prod || !nombre) {
+      el.className = 'sweep-row skip';
+      el.querySelector('.sweep-icon').textContent = '⚠️';
+      el.querySelector('.sweep-status').textContent = f.prod ? 'Sin cliente' : 'Sin producto';
+      errors++;
+    } else {
+      try {
+        var rec = {
+          cliente_nombre: nombre,
+          cliente_dir: dir,
+          cliente_giro: giro,
+          producto: f.prod,
+          marca: f.marca,
+          presentacion: f.pres,
+          unidad: f.unidad,
+          pz_presentacion: f.pz,
+          precio_compra: f.precio,
+          frecuencia: f.freq,
+          fecha_captura: new Date().toISOString()
+        };
+        var res = await db.from('merida_registros').insert(rec);
+        if (res.error) throw res.error;
+        el.className = 'sweep-row done';
+        el.querySelector('.sweep-icon').textContent = '✅';
+        el.querySelector('.sweep-status').textContent = 'Guardado';
+        ok++;
+      } catch(e) {
+        el.className = 'sweep-row err';
+        el.querySelector('.sweep-icon').textContent = '❌';
+        el.querySelector('.sweep-status').textContent = 'Error';
+        errors++;
+      }
+    }
+
+    // Actualizar barra
+    barEl.style.width = ((idx + 1) / filas.length * 100) + '%';
+    await new Promise(function(r){ setTimeout(r, 220); });
+  }
+
+  // Fin del barrido
+  titleEl.textContent = errors === 0 ? '🎉 ¡Barrido completado!' : '⚠️ Barrido con ' + errors + ' error(es)';
+  subEl.textContent = ok + ' producto(s) guardados' + (errors > 0 ? ', ' + errors + ' con error' : '') + '.';
+  doneMsg.style.display = 'block';
+  btnNext.style.display = 'block';
+  counterEl.textContent = '';
 }
 
 function finalizarBarrido() {
-  document.getElementById('sweep-overlay').classList.remove('show');
-  // Limpiar todo
+  document.getElementById('sweep-overlay').classList.remove('open');
+  limpiarPantalla();
+  toast('✓ Listo para nuevo cliente', 'ok');
+}
+
+function limpiarPantalla() {
   document.getElementById('cli-nombre').value = '';
-  document.getElementById('cli-dir').value = '';
+  document.getElementById('cli-calle').value = '';
   document.getElementById('cli-cp').value = '';
-  document.getElementById('cli-colonia').innerHTML = '<option value="">Ingresa CP primero...</option>';
+  document.getElementById('cli-colonia').value = '';
   document.getElementById('cli-ciudad').value = '';
   document.getElementById('cli-giro').value = '';
-  document.getElementById('cli-giro-otro').value = '';
-  document.getElementById('cli-giro-otro').style.display = 'none';
-  document.getElementById('tbody').innerHTML = '<tr id="empty-row"><td colspan="9"><div class="empty-state"><div class="empty-icon">📋</div><div>Presiona <strong>"+ Agregar producto"</strong> para comenzar</div></div></td></tr>';
-  rowCount = 0;
-  totalFilas = 0;
-  totalGuardados = 0;
-  actualizarContador();
-  _cpPrev = '';
+  document.getElementById('tbody').innerHTML = '<tr id="empty-row"><td colspan="9"><div class="empty-state"><div class="empty-icon">📋</div><div>Presiona <strong>&quot;+ Agregar producto&quot;</strong> para comenzar</div></div></td></tr>';
+  rc = 0;
+  upd();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ─── TOAST ────────────────────────────────────────────────────
-function toast(msg, tipo) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + (tipo || 'ok') + ' show';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(function() { t.className = 'toast'; }, 3000);
-}
-
-// ─── INIT ─────────────────────────────────────────────────────
 document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-MX', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
 testConn();
 </script>
