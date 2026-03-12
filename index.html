@@ -305,24 +305,25 @@ const SUPA_URL = 'https://vqhmksletdhbtkeldtmh.supabase.co';
 const SUPA_KEY = 'sb_publishable_aW18t1A4NkwKNDr6leJYHA_K9CwbDZt';
 const {createClient} = supabase; const db = createClient(SUPA_URL, SUPA_KEY);
 
-// ─── CÓDIGO POSTAL → COLONIAS ─────────────────────────────────
-async function buscarColonias(cp) {
-  const sel = document.getElementById('cli-colonia');
-  const ciudad = document.getElementById('cli-ciudad');
+// ─── CÓDIGO POSTAL → COLONIAS (datos embebidos) ───────────────
+const CP_DATA = {
+  "97000":["Centro","Jesús Carranza","Santa Ana","García Ginerés","Emilio Portes Gil","Cordemex"],"97100":["Itzimná","Campestre","Buenavista","Benito Juárez Nte","Polígono 108"],"97110":["Pedregales de Tanlúm","Gran Santa Fe","Santa Rita Cholul","Cholul","Tanlúm"],"97115":["Gran Santa Fe II","Bosques de Mérida","Santa Gertrudis Copó"],"97117":["Altabrisa","Chuburná de Hidalgo","Chuburná Puerto"],"97118":["Chuburná Inn","Chuburná de Hidalgo","Residencial Chuburná"],"97119":["Santa Fe","Montes de Amé","Las Américas"],"97120":["Montejo","Colonia México","Residencial Colonia México"],"97125":["Vergel I","Vergel II","Vergel III","Vergel IV"],"97127":["Residencial Pensiones","Pensiones"],"97128":["Pensiones","Residencial Pensiones"],"97129":["Díaz Ordaz","Residencial Pensiones"],"97130":["Inalámbrica","Mejorada","La Mejorada"],"97133":["Sambulá","Yucalpetén","Las Granjas"],"97134":["San Esteban","Granjas","Las Granjas"],"97136":["Emiliano Zapata Sur","Emiliano Zapata Nte"],"97137":["San José Tecoh","Petcanché"],"97138":["Los Héroes","San José Tecoh"],"97139":["Cicolsa","Industrial"],"97140":["Pacabtún","Residencial Pacabtún","Las Palmas"],"97143":["El Roble","Villas del Sur"],"97145":["Caucel","Caucel CTM"],"97146":["Ampliación Caucel","Flamboyanes"],"97148":["Xoclán","Xoclán Santo"],"97150":["García Gineres","Santa Catalina","Cantón Zavala"],"97155":["Santa Rosa","Miraflores","Los Pinos"],"97157":["Real Montejo","Montejo"],"97160":["Fraccionamiento del Parque","Del Parque","Lomas del Sol"],"97170":["Valentín Gómez Farías","Plan de Ayala","Ricardo Flores Magón"],"97173":["La Cañada","Bojórquez"],"97174":["Bojórquez","La Cañada"],"97175":["Dzitya","Ex Hacienda Dzitya"],"97176":["Dzityá","Komchén"],"97178":["Komchén","Dzitya"],"97180":["Mulsay","Mulsay III Etapa"],"97183":["San Marcos Nocoh","Cinco Colonias"],"97184":["Cinco Colonias","Ciudad Caucel"],"97185":["Texán de Palomeque","Caucel"],"97190":["Héroes de Chapultepec","Esperanza","Solidaridad"],"97200":["Alemán","Salvador Alvarado","Miguel Hidalgo"],"97203":["Chuminópolis","Obrera"],"97204":["Industrial","Aviación"],"97205":["Aviación","Industrial"],"97206":["Juan Pablo II","Gran Oriente"],"97207":["Villas del Oriente","Los Almendros"],"97208":["Canaán","Lomas de Mérida"],"97209":["Dzununcán","Fraccionamiento Dzununcán"],"97210":["Emiliano Zapata","Emiliano Zapata Nte","Emiliano Zapata Sur"],"97213":["Villas La Hacienda","Hacienda Mérida"],"97214":["Hacienda Mérida","Villas La Hacienda"],"97215":["San Pedro Nohpat","Nohpat"],"97216":["Nohpat","San Pedro Nohpat"],"97217":["Petcanché","San José Tecoh"],"97218":["Xcunyá","Komchén"],"97219":["San Ignacio Tessip","Tessip"],"97220":["México Oriente","Morelos","Las Flores"],"97225":["Pedregal","Pedregal Oriente"],"97226":["San José Oriente","Oriente"],"97229":["Las Brisas","Hacienda"],"97230":["Brisas","Prados de Chuburná"],"97235":["Residencial Brisas","Las Brisas"],"97240":["Francisco de Montejo","Montejo"],"97243":["Ciudad Caucel","Nueva Caucel"],"97245":["Supermanzana 62","Gran Mérida"],"97246":["San Lorenzo","Gran Mérida"],"97250":["Los Almendros","Jardines del Poniente","Mérida Poniente"],"97253":["Benito Juárez Ote","Benito Juárez"],"97254":["Benito Juárez Nte","Benito Juárez"],"97255":["Benito Juárez Nte","Benito Juárez"],"97257":["Pinos","Los Pinos"],"97260":["Revolución","San Antonio Xluch","Xluch"],"97263":["San Antonio Xluch II","Xluch"],"97264":["Xcumpich","San Antonio Xluch"],"97265":["Xcumpich","Industrial Xcumpich"],"97266":["Industrial Xcumpich","Xcumpich"],"97267":["Dzibilchaltún","Xcumpich"],"97268":["Ex Hacienda el Refugio","Refugio"],"97270":["Melchor Ocampo","Cantón Oriente","Las Torres"],"97273":["Las Torres","Cantón"],"97274":["Cantón","Las Torres"],"97275":["Juan Pablo II","Flamboyanes"],"97276":["Flamboyanes","Juan Pablo II"],"97277":["Los Volcanes","Volcanic"],"97278":["Bosques de Mérida","Santa Gertrudis"],"97279":["Santa Gertrudis Copó","Bosques"],"97280":["Vergel","Vergel Poniente","San Marcos"],"97283":["San Marcos","Vergel"],"97285":["Leandro Valle","San Marcos"],"97286":["Caucel","Leandro Valle"],"97288":["Lerma","Ciudad Industrial"],"97290":["Ciudad Industrial","Lerma","Industrial Mérida"],"97293":["Industrial Mérida","Ciudad Industrial"],"97295":["Nuevo Mérida","Ciudad Industrial"],"97296":["Parque Industrial","Industrial"],"97297":["Progreso Industrial","Parque Industrial"],"97298":["Granjas","Industrial"],"97299":["Santa Cruz Palomeque","Palomeque"],"97300":["Kanasín","Centro Kanasín"],"97305":["Cholul","Santa Rita Cholul"],"97306":["Tixcacal","Kanasín"],"97307":["Mulsay","Caucel"],"97308":["Dzununcan","Kanasín"],"97309":["Tetiz","Kinchil"],"97310":["Umán","Centro Umán"],"97315":["Umán","Sierra Papacal"],"97320":["Progreso","Centro Progreso"],"97326":["Chelem","Chuburná Puerto"],"97328":["Chuburná Puerto","Chelem"],"97330":["Telchac Puerto","Telchac"],"97340":["Izamal","Centro Izamal"],"97345":["Izamal","Cacalchén"],"97350":["Motul","Centro Motul"],"97360":["Tizimín","Centro Tizimín"],"97370":["Valladolid","Centro Valladolid"],"97380":["Valladolid","Sisal"],"97400":["Ticul","Centro Ticul"],"97430":["Oxkutzcab","Centro Oxkutzcab"],"97440":["Tekax","Centro Tekax"],"97470":["Peto","Centro Peto"],"97500":["Chetumal","Centro"],"97510":["Bacalar","Centro Bacalar"],"97600":["Campeche","Centro Campeche"]
+};
+const CIUDAD_DATA = {
+  "97000":"Mérida","97100":"Mérida","97110":"Mérida","97115":"Mérida","97117":"Mérida","97118":"Mérida","97119":"Mérida","97120":"Mérida","97125":"Mérida","97127":"Mérida","97128":"Mérida","97129":"Mérida","97130":"Mérida","97133":"Mérida","97134":"Mérida","97136":"Mérida","97137":"Mérida","97138":"Mérida","97139":"Mérida","97140":"Mérida","97143":"Mérida","97145":"Mérida","97146":"Mérida","97148":"Mérida","97150":"Mérida","97155":"Mérida","97157":"Mérida","97160":"Mérida","97170":"Mérida","97173":"Mérida","97174":"Mérida","97175":"Mérida","97176":"Mérida","97178":"Mérida","97180":"Mérida","97183":"Mérida","97184":"Mérida","97185":"Mérida","97190":"Mérida","97200":"Mérida","97203":"Mérida","97204":"Mérida","97205":"Mérida","97206":"Mérida","97207":"Mérida","97208":"Mérida","97209":"Mérida","97210":"Mérida","97213":"Mérida","97214":"Mérida","97215":"Mérida","97216":"Mérida","97217":"Mérida","97218":"Mérida","97219":"Mérida","97220":"Mérida","97225":"Mérida","97226":"Mérida","97229":"Mérida","97230":"Mérida","97235":"Mérida","97240":"Mérida","97243":"Mérida","97245":"Mérida","97246":"Mérida","97250":"Mérida","97253":"Mérida","97254":"Mérida","97255":"Mérida","97257":"Mérida","97260":"Mérida","97263":"Mérida","97264":"Mérida","97265":"Mérida","97266":"Mérida","97267":"Mérida","97268":"Mérida","97270":"Mérida","97273":"Mérida","97274":"Mérida","97275":"Mérida","97276":"Mérida","97277":"Mérida","97278":"Mérida","97279":"Mérida","97280":"Mérida","97283":"Mérida","97285":"Mérida","97286":"Mérida","97288":"Mérida","97290":"Mérida","97293":"Mérida","97295":"Mérida","97296":"Mérida","97297":"Mérida","97298":"Mérida","97299":"Mérida","97300":"Kanasín","97305":"Cholul","97306":"Kanasín","97307":"Mérida","97308":"Dzununcan","97309":"Tetiz","97310":"Umán","97315":"Umán","97320":"Progreso","97326":"Chelem","97328":"Chuburná Puerto","97330":"Telchac Puerto","97340":"Izamal","97345":"Izamal","97350":"Motul","97360":"Tizimín","97370":"Valladolid","97380":"Valladolid","97400":"Ticul","97430":"Oxkutzcab","97440":"Tekax","97470":"Peto"
+};
+
+function buscarColonias(cp) {
+  var sel = document.getElementById('cli-colonia');
+  var ciudad = document.getElementById('cli-ciudad');
   if (!sel || !ciudad) return;
   if (cp.length < 5) {
     sel.innerHTML = '<option value="">Ingresa CP primero...</option>';
     ciudad.value = '';
     return;
   }
-  sel.innerHTML = '<option>Buscando...</option>';
-  ciudad.value = 'Cargando...';
-  try {
-    const r = await fetch('https://api-sepomex.hckdrk.mx/query/info_cp/' + cp);
-    if (!r.ok) throw new Error('no ok');
-    const d = await r.json();
-    const colonias = d.response && d.response.asentamientos ? d.response.asentamientos : [];
-    if (colonias.length === 0) throw new Error('vacio');
+  var colonias = CP_DATA[cp];
+  if (colonias && colonias.length > 0) {
     sel.innerHTML = '';
     colonias.forEach(function(c, i) {
       var opt = document.createElement('option');
@@ -330,28 +331,11 @@ async function buscarColonias(cp) {
       if (i === 0) opt.selected = true;
       sel.appendChild(opt);
     });
-    ciudad.value = (d.response && d.response.municipio) ? d.response.municipio : '';
-    return;
-  } catch(e) {}
-  // Fallback: sepomex icalialabs
-  try {
-    const r2 = await fetch('https://sepomex.icalialabs.com/api/v1/zip_codes?zip_code=' + cp);
-    if (!r2.ok) throw new Error('no ok');
-    const d2 = await r2.json();
-    const zips = d2.zip_codes || [];
-    if (zips.length === 0) throw new Error('vacio');
-    sel.innerHTML = '';
-    zips.forEach(function(z, i) {
-      var opt = document.createElement('option');
-      opt.value = z.d_asenta; opt.textContent = z.d_asenta;
-      if (i === 0) opt.selected = true;
-      sel.appendChild(opt);
-    });
-    ciudad.value = zips[0].d_mnpio || '';
-    return;
-  } catch(e2) {}
-  sel.innerHTML = '<option value="">No encontrado — escribe la colonia</option>';
-  ciudad.value = '';
+    ciudad.value = CIUDAD_DATA[cp] || 'Mérida';
+  } else {
+    sel.innerHTML = '<option value="Otra">Otra colonia</option>';
+    ciudad.value = '';
+  }
 }
 
 async function testConn() {
