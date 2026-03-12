@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Captura Mérida · Prolub</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6f9;--surface:#fff;--surface2:#f0f3f7;--border:#dde2ea;
+  --accent:#f97316;--accent2:#3b82f6;--green:#22c55e;--red:#ef4444;
+  --text:#1a2233;--muted:#6b7a90;
+  --font:'Syne',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{overflow-x:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:linear-gradient(90deg,#fff,#f4f6f9);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100;box-shadow:0 1px 6px rgba(0,0,0,.07)}
+.logo-block{display:flex;align-items:center;gap:10px}
+.logo-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.logo-text{font-family:var(--mono);font-size:.78rem;font-weight:600;letter-spacing:.08em;color:var(--text)}
+.logo-sub{font-size:.6rem;color:var(--muted);font-family:var(--mono)}
+.spacer{flex:1}
+.top-badge{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:var(--accent);font-family:var(--mono);font-size:.6rem;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:.06em}
+.btn-export{background:linear-gradient(135deg,var(--green),#16a34a);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.75rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
+.btn-export:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(34,197,94,.3)}
+.btn-export svg{width:14px;height:14px;flex-shrink:0}
+/* CLIENT */
+.client-section{margin:20px 20px 0;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.sec-hd{background:linear-gradient(90deg,var(--surface2),var(--surface));padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sec-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.ic-blue{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2)}
+.ic-orange{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2)}
+.sec-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.tc-blue{color:var(--accent2)}
+.tc-orange{color:var(--accent)}
+.client-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;padding:16px 18px}
+@media(max-width:680px){.client-grid{grid-template-columns:1fr}}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fl{font-family:var(--mono);font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.fi{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-family:var(--font);font-size:.8rem;color:var(--text);outline:none;transition:all .2s;width:100%}
+.fi:focus{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.fi::placeholder{color:var(--muted);opacity:.6}
+
+/* PROGRESS */
+.progress-section{margin:14px 20px;padding:12px 18px;background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:14px}
+.pb{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.pf{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;transition:width .4s ease;width:0%}
+.pt{font-family:var(--mono);font-size:.62rem;color:var(--muted);white-space:nowrap}
+.pt strong{color:var(--text)}
+
+/* TABLE */
+.table-section{margin:0 20px 24px}
+.table-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.counter{margin-left:auto;font-family:var(--mono);font-size:.62rem;color:var(--muted)}
+.counter span{color:var(--green);font-weight:600}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:860px}
+thead tr{background:linear-gradient(90deg,#f0f3f7,#e8ecf3)}
+th{padding:11px 12px;text-align:left;font-family:var(--mono);font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+th.cp{color:var(--text);font-size:.62rem}
+th.ci{color:var(--accent)}
+tbody tr{border-bottom:1px solid rgba(221,226,234,.7);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(249,115,22,.025)}
+tbody tr.done{background:rgba(34,197,94,.04)}
+tbody tr.done:hover{background:rgba(34,197,94,.07)}
+td{padding:7px 10px;vertical-align:middle}
+.ti{background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-family:var(--font);font-size:.75rem;color:var(--text);outline:none;transition:all .2s;width:100%}
+.ti:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(249,115,22,.12);background:#fff}
+.ti::placeholder{color:var(--muted);opacity:.5;font-size:.68rem}
+.ti.ok{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.05)}
+.ts{background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-family:var(--font);font-size:.75rem;color:var(--text);outline:none;transition:all .2s;width:100%;cursor:pointer}
+.ts:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(249,115,22,.12)}
+.ts.ok{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.05)}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--border);display:inline-block;transition:all .3s}
+.sdot.on{background:var(--green);box-shadow:0 0 5px var(--green)}
+
+/* SAVED ROW */
+tbody tr.saved{background:rgba(34,197,94,.06)}
+tbody tr.saved td{color:var(--text)}
+tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,197,94,.3);color:var(--text)}
+
+/* ADD BUTTON */
+.btn-add{display:flex;align-items:center;gap:8px;background:#fff;border:1.5px dashed var(--border);border-radius:10px;padding:10px 18px;cursor:pointer;width:100%;margin-top:10px;font-family:var(--font);font-size:.75rem;font-weight:600;color:var(--muted);transition:all .2s}
+.btn-add:hover{border-color:var(--accent);color:var(--accent);background:rgba(249,115,22,.04)}
+.btn-add svg{width:15px;height:15px;flex-shrink:0}
+
+/* SAVE ROW BUTTON */
+.btn-save-row{background:linear-gradient(135deg,var(--accent2),#2563eb);color:#fff;border:none;padding:5px 11px;border-radius:6px;font-family:var(--font);font-size:.68rem;font-weight:700;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-save-row:hover{opacity:.85}
+.btn-save-row:disabled{background:var(--green);cursor:default;opacity:1}
+
+/* NUEVA CAPTURA */
+.btn-nueva{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;padding:8px 18px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.75rem;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s}
+.btn-nueva:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(124,58,237,.35)}
+.btn-nueva svg{width:14px;height:14px;flex-shrink:0}
+/* MODAL CONFIRM */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-bg.open{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-title{font-size:1rem;font-weight:800;color:var(--text);margin-bottom:8px}
+.modal-sub{font-size:.78rem;color:var(--muted);line-height:1.5;margin-bottom:20px}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+.modal-cancel{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:8px;font-family:var(--font);font-weight:600;font-size:.78rem;cursor:pointer}
+.modal-ok{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-family:var(--font);font-weight:700;font-size:.78rem;cursor:pointer}
+
+/* SWEEP OVERLAY */
+.sweep-overlay{position:fixed;inset:0;background:rgba(15,23,42,.82);z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px}
+.sweep-overlay.open{display:flex}
+.sweep-box{background:#fff;border-radius:20px;padding:32px 36px;max-width:420px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.sweep-title{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:6px}
+.sweep-sub{font-size:.75rem;color:var(--muted);margin-bottom:22px;line-height:1.5}
+.sweep-rows{display:flex;flex-direction:column;gap:6px;max-height:240px;overflow-y:auto;margin-bottom:20px}
+.sweep-row{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--border);font-size:.72rem;text-align:left;transition:all .3s}
+.sweep-row.saving{background:rgba(59,130,246,.07);border-color:rgba(59,130,246,.3)}
+.sweep-row.done{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3)}
+.sweep-row.err{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.3)}
+.sweep-row.skip{background:rgba(107,122,144,.05);border-color:var(--border);opacity:.6}
+.sweep-icon{font-size:.9rem;flex-shrink:0;width:18px;text-align:center}
+.sweep-name{flex:1;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sweep-status{font-family:var(--mono);font-size:.6rem;color:var(--muted);white-space:nowrap}
+.sweep-bar-wrap{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:16px}
+.sweep-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;width:0%;transition:width .35s ease}
+.sweep-counter{font-family:var(--mono);font-size:.65rem;color:var(--muted);margin-bottom:4px}
+.sweep-done-msg{font-size:.8rem;font-weight:700;color:var(--green);display:none}
+.btn-sweep-next{background:linear-gradient(135deg,#7c3aed,#6d28d9);color:#fff;border:none;padding:10px 24px;border-radius:10px;font-family:var(--font);font-weight:700;font-size:.8rem;cursor:pointer;display:none;width:100%;margin-top:4px;transition:all .2s}
+.btn-sweep-next:hover{opacity:.88}
+/* EMPTY */
+.empty-state{padding:32px;text-align:center;color:var(--muted);font-size:.8rem}
+.empty-icon{font-size:2rem;margin-bottom:8px}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;z-index:999;padding:12px 18px;border-radius:10px;font-size:.78rem;font-weight:600;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;font-family:var(--mono);box-shadow:0 4px 20px rgba(0,0,0,.12)}
+
+/* DELETE ROW BUTTON (solo visual, registra intento en admin) */
+.btn-del-row{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#ef4444;padding:4px 7px;border-radius:6px;font-size:.75rem;cursor:pointer;transition:all .2s;display:none;align-items:center;justify-content:center}
+.btn-del-row:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
+
+.footer{text-align:center;padding:20px;font-family:var(--mono);font-size:.58rem;color:var(--muted);border-top:1px solid var(--border)}
+
+/* DB STATUS */
+.db-status{font-family:var(--mono);font-size:.6rem;display:flex;align-items:center;gap:5px}
+.db-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}
+.db-dot.ok{background:var(--green)}
+.db-dot.err{background:var(--red)}
+
+@media(max-width:600px){
+  .topbar{padding:10px 14px;gap:8px}
+  .client-section,.table-section,.progress-section{margin-left:12px;margin-right:12px}
+  .btn-export span{display:none}
+  .top-badge{display:none}
+}
+</style>
+</head>
+<body>
+
+  <div class="logo-block">
+    <div class="logo-dot"></div>
+    <div>
+      <div class="logo-text">PROLUB · CEDIS MÉRIDA</div>
+      <div class="logo-sub">Captura de datos de cliente</div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="db-status"><div class="db-dot" id="db-dot"></div><span id="db-txt" style="color:var(--muted)">conectando...</span></div>
+  <div class="top-badge">LIVE</div>
+  <button class="btn-nueva" onclick="abrirModal()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+    <span>Nuevo cliente (Reset)</span>
+  </button>
+  <button class="btn-export" onclick="descargarKardex()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    <span>Kardex</span>
+  </button>
+</div>
+
+<!-- DATOS CLIENTE -->
+<div class="client-section">
+  <div class="sec-hd">
+    <div class="sec-icon ic-blue"></div>
+    <div class="sec-title tc-blue">Datos del Cliente</div>
+  </div>
+  <div class="client-grid">
+    <div class="fg">
+      <label class="fl">Nombre del Cliente</label>
+      <input class="fi" id="cli-nombre" placeholder="Nombre o razón social">
+    </div>
+    <div class="fg">
+      <label class="fl">Calle y Número</label>
+      <input class="fi" id="cli-calle" placeholder="Ej: Av. Reforma 123">
+    </div>
+    <div class="fg">
+      <label class="fl">Código Postal</label>
+      <input class="fi" id="cli-cp" placeholder="Ej: 97000" maxlength="5" oninput="buscarColonias(this.value)">
+    </div>
+    <div class="fg">
+      <label class="fl">Colonia</label>
+      <select class="fi" id="cli-colonia">
+        <option value="">Ingresa CP primero...</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label class="fl">Ciudad / Municipio</label>
+      <input class="fi" id="cli-ciudad" placeholder="Cargando..." readonly style="background:#f0f3f7;color:var(--muted)">
+    </div>
+    <div class="fg">
+      <label class="fl">Giro de Negocio</label>
+      <select class="fi" id="cli-giro">
+        <option value="">Seleccionar giro...</option>
+        <option>Automotriz / Taller Mecánico</option>
+        <option>Distribución / Mayorista</option>
+        <option>Agrícola / Campo</option>
+        <option>Industrial / Manufactura</option>
+        <option>Transporte / Logística</option>
+        <option>Minería</option>
+        <option>Servicio Pesado</option>
+        <option>Marino / Pesca</option>
+        <option>Comercio / Retail</option>
+        <option>Otro</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESO -->
+<div class="progress-section">
+  <div class="pb"><div class="pf" id="pf"></div></div>
+  <div class="pt"><strong id="pn">0</strong> / <strong id="pt2">0</strong> productos guardados</div>
+</div>
+
+<!-- TABLA -->
+<div class="table-section">
+  <div class="table-header">
+    <div class="sec-icon ic-orange">️</div>
+          <th class="ci" style="min-width:148px">Frecuencia / Forecast</th>
+          <th style="width:80px;text-align:center">Guardar</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr id="empty-row">
+          <td colspan="8">
+            <div class="empty-state">
+              <div class="empty-icon"></div>
+              <div>Presiona <strong>"+ Agregar producto"</strong> para comenzar</div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <button class="btn-add" id="btn-add-row" onclick="addRow()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Agregar producto
+  </button>
+</div>
+
+<div class="footer">PROLUB · Captura CEDIS Mérida · <span id="fecha-hoy"></span></div>
+<div class="modal-bg" id="modal-bg">
+  <div class="modal-box">
+    <div class="modal-title">¿Nuevo cliente (Reset)?</div>
+    <div class="modal-sub">Se guardarán <strong>todos los productos pendientes</strong> en la base de datos y se limpiará la pantalla para capturar un nuevo cliente.</div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="modal-ok" onclick="iniciarBarrido()">Sí, guardar y continuar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<!-- SWEEP OVERLAY -->
+<div class="sweep-overlay" id="sweep-overlay">
+  <div class="sweep-box">
+    <div class="sweep-title" id="sweep-title"> Guardando productos...</div>
+    <div class="sweep-sub" id="sweep-sub">Registrando todos los productos del cliente en la base de datos</div>
+    <div class="sweep-counter" id="sweep-counter"></div>
+    <div class="sweep-bar-wrap"><div class="sweep-bar" id="sweep-bar"></div></div>
+    <div class="sweep-rows" id="sweep-rows"></div>
+    <div class="sweep-done-msg" id="sweep-done-msg">✅ ¡Todos los productos guardados! Listo para nuevo cliente.</div>
+    <button class="btn-sweep-next" id="btn-sweep-next" onclick="finalizarBarrido()">➕ Nuevo cliente</button>
+  </div>
+</div>
+
+<script>
+// ─── SUPABASE ──────────────────────────────────────────────────
+const SUPA_URL = 'https://vqhmksletdhbtkeldtmh.supabase.co';
+const SUPA_KEY = 'sb_publishable_aW18t1A4NkwKNDr6leJYHA_K9CwbDZt';
+const {createClient} = supabase; const db = createClient(SUPA_URL, SUPA_KEY);
+
+async function testConn() {
+  try {
+    const { error } = await db.from('merida_registros').select('id').limit(1);
+    if (error) throw error;
+    document.getElementById('db-dot').className = 'db-dot ok';
+    document.getElementById('db-txt').textContent = 'base de datos ✓';
+  } catch(e) {
+    document.getElementById('db-dot').className = 'db-dot err';
+    document.getElementById('db-txt').textContent = 'sin conexión';
+  }
+}
+
+// ─── VARS ──────────────────────────────────────────────────────
+const FREQ = ['','Diaria','Semanal','Quincenal','Mensual','Bimestral','Trimestral','Semestral','Anual'];
+let rc = 0;
+
+function mkopts(arr) {
+  return arr.map(v => `<option value="${v}">${v || 'Seleccionar...'}</option>`).join('');
+}
+
+// ─── ADD ROW ───────────────────────────────────────────────────
+function addRow() {
+  const er = document.getElementById('empty-row');
+  if (er) er.remove();
+
+  const i = rc++;
+  const tbody = document.getElementById('tbody');
+  const tr = document.createElement('tr');
+  tr.id = 'r' + i;
+  tr.dataset.idx = i;
+  tr.style.opacity = '0';
+  tr.style.transform = 'translateY(-5px)';
+
+  tr.innerHTML =
+    '<td><span style="font-family:var(--mono);font-size:.6rem;color:var(--muted)" id="rn' + i + '"></span></td>' +
+    '<td><input class="ti" id="p' + i + '" type="text" placeholder="Nombre del producto..." oninput="chk(' + i + ')" style="min-width:190px"></td>' +
+    '<td><input class="ti" id="m' + i + '" type="text" placeholder="Ej: PROLUB..." oninput="chk(' + i + ')" style="min-width:105px"></td>' +
+    '<td><input class="ti" id="pr' + i + '" type="text" placeholder="Ej: 19L, 24x1L..." oninput="chk(' + i + ')" style="min-width:95px"></td>' +
+    '<td><input class="ti" id="pz' + i + '" type="number" min="0" placeholder="Ej: 24" oninput="chk(' + i + ')" style="min-width:65px"></td>' +
+    '<td><select class="ts" id="un' + i + '" oninput="chk(' + i + ')" style="min-width:110px"><option value="">-- Unidad --</option><option>Lt</option><option>Kg</option><option>Cont 1,000 Lt</option><option>Tambo 200 Lt</option><option>Cub 19 Lt</option><option>Galón</option><option>Pieza</option></select></td>' +
+    '<td><input class="ti" id="pc' + i + '" type="text" placeholder="$ sin IVA" oninput="chk(' + i + ')" style="min-width:90px"></td>' +
+    '<td><input class="ti" id="f' + i + '" type="text" placeholder="Semanal, Mensual..." oninput="chk(' + i + ')" style="min-width:100px"></td>' +
+    '<td style="white-space:nowrap">' +
+      '<button class="btn-save-row" id="sb' + i + '" onclick="guardarFila(' + i + ')">Guardar</button>' +
+      ' <button class="btn-del-row" id="db' + i + '" onclick="intentarBorrar(' + i + ')">&#128465;</button>' +
+    '</td>' +
+  '</tr>';
+  document.getElementById('tbody').insertBefore(tr, document.getElementById('empty-row'));
+  document.getElementById('empty-row') && (document.getElementById('empty-row').style.display='none');
+  r.classList.toggle('done', filled);
+  if (d) d.classList.toggle('on', filled);
+  upd();
+}
+
+// ─── GUARDAR FILA EN SUPABASE ──────────────────────────────────
+async function guardarFila(i) {
+  var nombre = document.getElementById('cli-nombre').value.trim();
+  var dir    = document.getElementById('cli-dir').value.trim();
+  var giro   = document.getElementById('cli-giro').value;
+  var prod   = (document.getElementById('p'+i)?.value || '').trim();
+  var marca  = document.getElementById('m'+i)?.value || '';
+  var pres   = document.getElementById('pr'+i)?.value || '';
+  var pz     = document.getElementById('pz'+i)?.value || '';
+  var precio = document.getElementById('pc'+i)?.value || '';
+  var freq   = document.getElementById('f'+i)?.value || '';
+// ─── CHECK ROW ─────────────────────────────────────────────────
+function chk(i) {
+  var ids = ['p'+i,'m'+i,'pr'+i,'pz'+i,'pc'+i,'f'+i];
+  var filled = true;
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) { filled = false; return; }
+    var hasVal = !!el.value;
+    el.classList.toggle('ok', hasVal);
+    if (!hasVal) filled = false;
+  });
+  var r = document.getElementById('r'+i);
+  var d = document.getElementById('d'+i);
+  var sb = document.getElementById('sb'+i);
+  if (!r) return;
+  r.classList.toggle('done', filled);
+  if (d) d.classList.toggle('on', filled);
+  upd();
+}
+
+// ─── GUARDAR FILA EN SUPABASE ──────────────────────────────────
+async function guardarFila(i) {
+  var nombre = document.getElementById('cli-nombre').value.trim();
+  var dir    = document.getElementById('cli-dir').value.trim();
+  var giro   = document.getElementById('cli-giro').value;
+  var prod   = (document.getElementById('p'+i)?.value || '').trim();
+  var marca  = document.getElementById('m'+i)?.value || '';
+  var pres   = document.getElementById('pr'+i)?.value || '';
+  var pz     = document.getElementById('pz'+i)?.value || '';
+  var precio = document.getElementById('pc'+i)?.value || '';
+}
+
+// ─── CHECK ROW ─────────────────────────────────────────────────
+function chk(i) {
+  var ids = ['p'+i,'m'+i,'pr'+i,'pz'+i,'pc'+i,'f'+i];
+  var filled = true;
+  ids.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (!el) { filled = false; return; }
+    var hasVal = !!el.value;
+    el.classList.toggle('ok', hasVal);
+    if (!hasVal) filled = false;
+  });
+  var r = document.getElementById('r'+i);
+  var d = document.getElementById('d'+i);
+  var sb = document.getElementById('sb'+i);
+  if (!r) return;
+  r.classList.toggle('done', filled);
+  if (d) d.classList.toggle('on', filled);
+  upd();
+}
+
+// ─── GUARDAR FILA EN SUPABASE ──────────────────────────────────
+async function guardarFila(i) {
+  var nombre = document.getElementById('cli-nombre').value.trim();
+  var dir    = document.getElementById('cli-dir').value.trim();
+  var giro   = document.getElementById('cli-giro').value;
+  var prod   = (document.getElementById('p'+i)?.value || '').trim();
+  var marca  = document.getElementById('m'+i)?.value || '';
+  var pres   = document.getElementById('pr'+i)?.value || '';
+  var pz     = document.getElementById('pz'+i)?.value || '';
+  var precio = document.getElementById('pc'+i)?.value || '';
+  var freq   = document.getElementById('f'+i)?.value || '';
+
+  if (!prod || !marca || !pres || !pz || !precio || !freq) {
+    toast('⚠ Completa todos los campos de la fila', 'warn');
+    return;
+  }
+  if (!nombre) { toast('⚠ Escribe el nombre del cliente primero', 'warn'); return; }
+
+  var sb = document.getElementById('sb'+i);
+  sb.disabled = true;
+  sb.textContent = 'Guardando...';
+
+  var rec = {
+    cliente_nombre: nombre,
+    cliente_dir: dir,
+    cliente_giro: giro,
+    producto: prod,
+    marca: marca,
+    presentacion: pres,
+    pz_presentacion: pz,
+    precio_compra: precio,
+    frecuencia: freq,
+    fecha_captura: new Date().toISOString()
+  };
+
+  try {
+    var res = await db.from('merida_registros').insert(rec);
+    if (res.error) throw res.error;
+
+    // Bloquear fila — ya guardada, no se puede editar ni borrar
+    ['p','m','pr','pz','pc','f'].forEach(function(k) {
+      var el = document.getElementById(k+i);
+      if (el) { el.readOnly = true; el.disabled = true; el.style.opacity = '.75'; }
+    });
+    var r = document.getElementById('r'+i);
+    if (r) r.classList.add('saved');
+    sb.textContent = '✓ Guardado';
+    sb.style.background = 'var(--green)';
+    var d = document.getElementById('d'+i);
+    if (d) { d.classList.add('on'); }
+    // Mostrar botón de borrar (solo visual — va a tabla admin)
+    var delBtn = document.getElementById('del'+i);
+    if (delBtn) delBtn.style.display = 'inline-flex';
+    toast('✓ Producto guardado correctamente', 'ok');
+
+// ─── INTENTO DE BORRADO → tabla admin oculta ───────────────────
+async function intentoBorrar(i) {
+  var nombre = document.getElementById('cli-nombre').value.trim();
+  var prod   = (document.getElementById('p'+i)?.value || document.getElementById('sb'+i)?.dataset?.prod || '').trim();
+  var marca  = '';
+  // Intentar leer los valores aunque estén disabled
+  ['p','m','pr','pz','pc','f'].forEach(function(k) {
+    var el = document.getElementById(k+i);
+    if (el && k==='p') prod  = el.value || prod;
+    if (el && k==='m') marca = el.value || marca;
+  });
+
+  // Registrar intento silenciosamente en tabla admin
+  try {
+    await db.from('merida_intentos_borrado').insert({
+      cliente_nombre: nombre || '(sin nombre)',
+      producto: prod || '(sin producto)',
+      marca: marca,
+      fila_idx: i,
+      fecha_intento: new Date().toISOString(),
+      user_agent: navigator.userAgent.substring(0, 120)
+    });
+  } catch(e) { /* silencioso — el usuario no sabe que se registró */ }
+
+  // Feedback visual — simular que "se eliminó" pero en realidad no pasa nada
+  var r = document.getElementById('r'+i);
+  if (r) {
+    r.style.transition = 'all .4s ease';
+    r.style.opacity = '0.3';
+    setTimeout(function() {
+      r.style.opacity = '1';
+      toast('⚠ Los productos guardados no se pueden eliminar', 'warn');
+    }, 400);
+  }
+}
+
+// ─── KARDEX EXCEL (solo productos guardados en esta sesión) ────
+async function descargarKardex() {
+  // Recopilar solo filas guardadas (class="saved")
+  var filas = [];
+  document.querySelectorAll('#tbody tr.saved').forEach(function(r, idx) {
+    var i = r.dataset.idx;
+    filas.push({
+      num: idx + 1,
+      producto:     (document.getElementById('p'+i)?.value  || '').replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ .,\\-\/]/g,''),
+      marca:        (document.getElementById('m'+i)?.value  || ''),
+      presentacion: (document.getElementById('pr'+i)?.value || ''),
+      pz:           (document.getElementById('pz'+i)?.value || ''),
+      precio:       (document.getElementById('pc'+i)?.value || ''),
+      frecuencia:   (document.getElementById('f'+i)?.value  || '')
+    });
+  });
+
+  var nombre  = document.getElementById('cli-nombre').value.trim() || 'Sin nombre';
+  var dir     = document.getElementById('cli-dir').value.trim()    || '';
+  var giro    = document.getElementById('cli-giro').value           || '';
+  var fecha   = new Date().toLocaleDateString('es-MX', {year:'numeric',month:'long',day:'numeric'});
+
+  if (filas.length === 0) {
+    toast('⚠ No hay productos guardados para exportar', 'warn');
+    return;
+  }
+
+  // Construir CSV con formato Kardex
+  var lines = [];
+  lines.push('"PROLUB · CEDIS MÉRIDA — KARDEX DE CAPTURA"');
+  lines.push('"Cliente:","' + nombre + '"');
+  lines.push('"Dirección:","' + dir + '"');
+  lines.push('"Giro:","' + giro + '"');
+  lines.push('"Fecha:","' + fecha + '"');
+  lines.push('');
+  lines.push(['"#"','"Producto"','"Marca"','"Presentación"','"Pz / Present."','"Precio Compra (sin IVA)"','"Frecuencia / Forecast"'].join(','));
+
+  filas.forEach(function(f) {
+    lines.push([
+      '"' + f.num + '"',
+      '"' + f.producto + '"',
+      '"' + f.marca + '"',
+      '"' + f.presentacion + '"',
+      '"' + f.pz + '"',
+      '"' + f.precio + '"',
+      '"' + f.frecuencia + '"'
+    ].join(','));
+  });
+
+  lines.push('');
+  lines.push('"Total productos guardados:","' + filas.length + '"');
+
+  var csv  = '\﻿' + lines.join('\
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  var a    = document.createElement('a');
+  a.href   = URL.createObjectURL(blob);
+  a.download = 'kardex-' + nombre.replace(/\\s+/g,'-').toLowerCase() + '-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  toast('✓ Kardex descargado — ' + filas.length + ' productos', 'ok');
+}
+
+// ─── TOAST ─────────────────────────────────────────────────────
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type==='ok' ? '#22c55e' : type==='warn' ? '#f59e0b' : '#ef4444';
+  t.style.color = '#fff';
+  t.style.transform = 'translateY(0)';
+  t.style.opacity = '1';
+  setTimeout(function() { t.style.transform = 'translateY(60px)'; t.style.opacity = '0'; }, 3200);
+}
+
+// ─── INIT ──────────────────────────────────────────────────────
+function abrirModal(){
+  // Contar filas pendientes
+async function descargarKardex() {
+  toast('⏳ Generando Kardex...', 'warn');
+  try {
+    var res = await db.from('merida_registros').select('*').order('fecha_captura', { ascending: false });
+    if (res.error) throw res.error;
+    var data = res.data;
+    if (!data || !data.length) {
+      toast('⚠ No hay registros guardados aún', 'warn');
+      return;
+    }
+
+    var fecha = new Date().toLocaleDateString('es-MX', {year:'numeric',month:'long',day:'numeric'});
+    var lines = [];
+    lines.push('"PROLUB · CEDIS MÉRIDA — KARDEX DE CAPTURA"');
+    lines.push('"Generado:","' + fecha + '"');
+    lines.push('"Total registros:","' + data.length + '"');
+    lines.push('');
+    lines.push(['"#"','"Cliente"','"Dirección"','"Giro"','"Producto"','"Marca"','"Presentación"','"Unidad"','"Pz / Present."','"Precio Compra (sin IVA)"','"Frecuencia / Forecast"','"Fecha Captura"'].join(','));
+
+    data.forEach(function(r, idx) {
+      lines.push([
+        '"'+(idx+1)+'"',
+        '"'+(r.cliente_nombre||'')+'"',
+        '"'+(r.cliente_dir||'')+'"',
+        '"'+(r.cliente_giro||'')+'"',
+        '"'+(r.producto||'')+'"',
+        '"'+(r.marca||'')+'"',
+        '"'+(r.presentacion||'')+'"',
+        '"'+(r.unidad||'')+'"',
+        '"'+(r.pz_presentacion||'')+'"',
+        '"'+(r.precio_compra||'')+'"',
+        '"'+(r.frecuencia||'')+'"',
+        '"'+(r.fecha_captura ? new Date(r.fecha_captura).toLocaleDateString('es-MX') : '')+'"'
+      ].join(','));
+    });
+
+    var csv  = '\﻿' + lines.join('\
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    var a    = document.createElement('a');
+    a.href   = URL.createObjectURL(blob);
+    a.download = 'kardex-merida-' + new Date().toISOString().slice(0,10) + '.csv';
+    a.click();
+    toast('✓ Kardex descargado — ' + data.length + ' registros', 'ok');
+  } catch(e) {
+    toast('Error al generar Kardex: ' + e.message, 'err');
+  }
+}
+
+// ─── TOAST ─────────────────────────────────────────────────────
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = type==='ok' ? '#22c55e' : type==='warn' ? '#f59e0b' : '#ef4444';
+  t.style.color = '#fff';
+  t.style.transform = 'translateY(0)';
+  t.style.opacity = '1';
+  setTimeout(function() { t.style.transform = 'translateY(60px)'; t.style.opacity = '0'; }, 3200);
+}
+
+// ─── INIT ──────────────────────────────────────────────────────
+function abrirModal(){
+  // Contar filas pendientes
+  var pendientes = contarPendientes();
+  var sub = document.querySelector('.modal-sub');
+  if (pendientes > 0) {
+    sub.innerHTML = 'Se guardarán <strong>' + pendientes + ' producto(s) pendiente(s)</strong> en la base de datos y se limpiará la pantalla para capturar un nuevo cliente.';
+  } else {
+    sub.innerHTML = 'No hay productos pendientes. Se limpiará la pantalla para capturar un nuevo cliente.';
+  }
+  document.getElementById('modal-bg').classList.add('open');
+}
+function cerrarModal(){document.getElementById('modal-bg').classList.remove('open');}
+
+function contarPendientes() {
+  var count = 0;
+  document.querySelectorAll('#tbody tr[data-idx]').forEach(function(r) {
+    if (!r.classList.contains('saved')) count++;
+  });
+  return count;
+}
+
+async function iniciarBarrido() {
+  cerrarModal();
+
+  // Recopilar todas las filas NO guardadas
+  var nombre  = document.getElementById('cli-nombre').value.trim();
+  var calle   = document.getElementById('cli-calle').value.trim();
+  var cp      = document.getElementById('cli-cp').value.trim();
+  var colonia = document.getElementById('cli-colonia').value;
+  var ciudad  = document.getElementById('cli-ciudad').value.trim();
+  var giro    = document.getElementById('cli-giro').value;
+  var dir     = [calle, colonia, cp, ciudad].filter(Boolean).join(', ');
+
+  var filas = [];
+  document.querySelectorAll('#tbody tr[data-idx]').forEach(function(r) {
+    if (r.classList.contains('saved')) return; // ya guardada
+    var i = r.dataset.idx;
+    var prod  = (document.getElementById('p'+i)?.value || '').trim();
+    var marca = (document.getElementById('m'+i)?.value || '').trim();
+    var pres  = (document.getElementById('pr'+i)?.value || '').trim();
+    var unidad= (document.getElementById('un'+i)?.value || '').trim();
+    var pz    = (document.getElementById('pz'+i)?.value || '').trim();
+    var precio= (document.getElementById('pc'+i)?.value || '').trim();
+    var freq  = (document.getElementById('f'+i)?.value || '').trim();
+    filas.push({ i, prod, marca, pres, unidad, pz, precio, freq });
+  });
+
+  // Si no hay nada pendiente, solo limpiar
+  if (filas.length === 0) {
+    limpiarPantalla();
+    toast('✓ Listo para nuevo cliente', 'ok');
+    return;
+  }
+
+  // Mostrar overlay de barrido
+  var overlay  = document.getElementById('sweep-overlay');
+  var rowsEl   = document.getElementById('sweep-rows');
+  var barEl    = document.getElementById('sweep-bar');
+  var counterEl= document.getElementById('sweep-counter');
+  var doneMsg  = document.getElementById('sweep-done-msg');
+  var btnNext  = document.getElementById('btn-sweep-next');
+  var titleEl  = document.getElementById('sweep-title');
+  var subEl    = document.getElementById('sweep-sub');
+
+  // Reset
+  rowsEl.innerHTML = '';
+  barEl.style.width = '0%';
+  doneMsg.style.display = 'none';
+  btnNext.style.display = 'none';
+  titleEl.textContent = ' Guardando productos...';
+  subEl.textContent = 'Registrando productos de: ' + (nombre || 'Cliente sin nombre');
+  overlay.classList.add('open');
+
+  // Crear filas visuales
+  var rowEls = {};
+  filas.forEach(function(f, idx) {
+    var div = document.createElement('div');
+    div.className = 'sweep-row';
+    div.id = 'sw-' + f.i;
+    div.innerHTML =
+      '<span class="sweep-icon">⏳</span>' +
+      '<span class="sweep-name">' + (f.prod || '(sin nombre)') + '</span>' +
+      '<span class="sweep-status">Pendiente</span>';
+    rowsEl.appendChild(div);
+    rowEls[f.i] = div;
+  });
+
+  // Guardar una por una con animación
+  var ok = 0, errors = 0;
+  for (var idx = 0; idx < filas.length; idx++) {
+    var f = filas[idx];
+    var el = rowEls[f.i];
+
+    // Animar como "guardando"
+    el.className = 'sweep-row saving';
+    el.querySelector('.sweep-icon').textContent = '';
+    el.querySelector('.sweep-status').textContent = 'Guardando...';
+    el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+
+    counterEl.textContent = (idx + 1) + ' de ' + filas.length + ' productos';
+
+    // Validar campos mínimos
+    if (!f.prod || !nombre) {
+      el.className = 'sweep-row skip';
+      el.querySelector('.sweep-icon').textContent = '⚠️';
+      el.querySelector('.sweep-status').textContent = f.prod ? 'Sin cliente' : 'Sin producto';
+      errors++;
+    } else {
+      try {
+        var rec = {
+          cliente_nombre: nombre,
+          cliente_dir: dir,
+          cliente_giro: giro,
+          producto: f.prod,
+          marca: f.marca,
+          presentacion: f.pres,
+          unidad: f.unidad,
+          pz_presentacion: f.pz,
+          precio_compra: f.precio,
+          frecuencia: f.freq,
+          fecha_captura: new Date().toISOString()
+        };
+        var res = await db.from('merida_registros').insert(rec);
+        if (res.error) throw res.error;
+        el.className = 'sweep-row done';
+        el.querySelector('.sweep-icon').textContent = '✅';
+        el.querySelector('.sweep-status').textContent = 'Guardado';
+        ok++;
+      } catch(e) {
+        el.className = 'sweep-row err';
+        el.querySelector('.sweep-icon').textContent = '❌';
+        el.querySelector('.sweep-status').textContent = 'Error';
+        errors++;
+      }
+    }
+
+    // Actualizar barra
+    barEl.style.width = ((idx + 1) / filas.length * 100) + '%';
+    await new Promise(function(r){ setTimeout(r, 220); });
+  }
+
+  // Fin del barrido
+  titleEl.textContent = errors === 0 ? ' ¡Barrido completado!' : '⚠️ Barrido con ' + errors + ' error(es)';
+  subEl.textContent = ok + ' producto(s) guardados' + (errors > 0 ? ', ' + errors + ' con error' : '') + '.';
+  doneMsg.style.display = 'block';
+  btnNext.style.display = 'block';
+  counterEl.textContent = '';
+}
+
+function finalizarBarrido() {
+  document.getElementById('sweep-overlay').classList.remove('open');
+  limpiarPantalla();
+  toast('✓ Listo para nuevo cliente', 'ok');
+}
+
+function limpiarPantalla() {
+  document.getElementById('cli-nombre').value = '';
+  document.getElementById('cli-calle').value = '';
+  document.getElementById('cli-cp').value = '';
+  document.getElementById('cli-colonia').innerHTML = '<option value="">Ingresa CP primero...</option>';
+  document.getElementById('cli-ciudad').value = '';
+  document.getElementById('cli-giro').value = '';
+  document.getElementById('tbody').innerHTML = '<tr id="empty-row"><td colspan="9"><div class="empty-state"><div class="empty-icon"></div><div>Presiona <strong>&quot;+ Agregar producto&quot;</strong> para comenzar</div></div></td></tr>';
+  rc = 0;
+  upd();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-MX', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+testConn();
+</script>
+</body>
+</html>
