@@ -150,10 +150,13 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
 .db-dot.err{background:var(--red)}
 
 @media(max-width:600px){
-  .topbar{padding:10px 14px;gap:8px}
+  .topbar{padding:10px 14px;gap:6px;flex-wrap:nowrap;overflow:hidden}
+  .logo-sub{display:none}
   .client-section,.table-section,.progress-section{margin-left:12px;margin-right:12px}
   .btn-export span{display:none}
+  .btn-nueva span{display:none}
   .top-badge:not(#badge-stats){display:none}
+  .db-status span{display:none}
 }
 </style>
 </head>
@@ -168,7 +171,7 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
     </div>
   </div>
   <div class="top-badge">LIVE</div>
-  <div class="top-badge" id="badge-stats">cargando...</div>
+  <div class="top-badge" id="badge-stats" style="display:none"></div>
   <div class="spacer"></div>
   <div class="db-status"><div class="db-dot" id="db-dot"></div><span id="db-txt" style="color:var(--muted)">conectando...</span></div>
   <button class="btn-nueva" onclick="abrirModal()">
@@ -311,19 +314,15 @@ const {createClient} = supabase; const db = createClient(SUPA_URL, SUPA_KEY);
 
 async function testConn() {
   try {
-    const { error } = await db.from('merida_registros').select('id').limit(1);
+    var { data: todos, error } = await db.from('merida_registros').select('nombre_cliente');
     if (error) throw error;
     document.getElementById('db-dot').className = 'db-dot ok';
     document.getElementById('db-txt').textContent = 'conectado';
-    // Contar clientes únicos y productos totales
-    var { data: todos } = await db.from('merida_registros').select('nombre_cliente');
-    if (todos) {
-      var clientes = new Set(todos.map(r => r.nombre_cliente)).size;
-      var productos = todos.length;
-      var badge = document.getElementById('badge-stats');
-      badge.textContent = clientes + ' clientes · ' + productos + ' productos';
-      badge.style.display = '';
-    }
+    var badge = document.getElementById('badge-stats');
+    var clientes = new Set((todos||[]).map(r => r.nombre_cliente)).size;
+    var productos = (todos||[]).length;
+    badge.textContent = clientes + ' clientes · ' + productos + ' productos';
+    badge.style.display = 'inline-flex';
   } catch(e) {
     document.getElementById('db-dot').className = 'db-dot err';
     document.getElementById('db-txt').textContent = 'sin conexión';
@@ -798,6 +797,8 @@ function limpiarPantalla() {
 
 document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-MX', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
 testConn();
+setTimeout(testConn, 2000);
+setTimeout(testConn, 5000);
 </script>
 </body>
 </html>
