@@ -59,7 +59,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14
 .counter{margin-left:auto;font-family:var(--mono);font-size:.62rem;color:var(--muted)}
 .counter span{color:var(--green);font-weight:600}
 .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:860px}
+table{width:100%;border-collapse:collapse;min-width:1000px}
 thead tr{background:linear-gradient(90deg,#f0f3f7,#e8ecf3)}
 th{padding:11px 12px;text-align:left;font-family:var(--mono);font-size:.58rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
 th.cp{color:var(--text);font-size:.62rem}
@@ -137,7 +137,7 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;z-index:999;padding:12px 18px;border-radius:10px;font-size:.78rem;font-weight:600;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;font-family:var(--mono);box-shadow:0 4px 20px rgba(0,0,0,.12)}
 
-/* DELETE ROW BUTTON (solo visual, registra intento en admin) */
+/* DELETE ROW BUTTON */
 .btn-del-row{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#ef4444;padding:4px 7px;border-radius:6px;font-size:.75rem;cursor:pointer;transition:all .2s;display:none;align-items:center;justify-content:center}
 .btn-del-row:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.4)}
 
@@ -148,6 +148,12 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
 .db-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}
 .db-dot.ok{background:var(--green)}
 .db-dot.err{background:var(--red)}
+
+/* COMENTARIOS textarea */
+.ti-comment{background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:7px 9px;font-family:var(--font);font-size:.72rem;color:var(--text);outline:none;transition:all .2s;width:100%;resize:none;min-height:34px;max-height:80px;overflow-y:auto;line-height:1.4}
+.ti-comment:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(249,115,22,.12);background:#fff}
+.ti-comment::placeholder{color:var(--muted);opacity:.5;font-size:.67rem}
+.ti-comment.ok{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.05)}
 
 @media(max-width:600px){
   .topbar{padding:10px 14px;gap:6px;flex-wrap:nowrap;overflow:hidden}
@@ -255,12 +261,13 @@ tbody tr.saved .ti, tbody tr.saved .ts{background:#f0fdf4;border-color:rgba(34,1
           <th class="ci" style="min-width:80px">Pz / Present.</th>
           <th class="ci" style="min-width:115px">Precio Compra <span style="font-weight:400;opacity:.75;text-transform:none;letter-spacing:0">(sin IVA)</span></th>
           <th class="ci" style="min-width:148px">Frecuencia / Forecast</th>
+          <th class="ci" style="min-width:160px">Comentarios</th>
           <th style="width:80px;text-align:center">Guardar</th>
         </tr>
       </thead>
       <tbody id="tbody">
         <tr id="empty-row">
-          <td colspan="9">
+          <td colspan="10">
             <div class="empty-state">
               <div class="empty-icon">📋</div>
               <div>Presiona <strong>"+ Agregar producto"</strong> para comenzar</div>
@@ -308,10 +315,6 @@ const SUPA_URL = 'https://vqhmksletdhbtkeldtmh.supabase.co';
 const SUPA_KEY = 'sb_publishable_aW18t1A4NkwKNDr6leJYHA_K9CwbDZt';
 const {createClient} = supabase; const db = createClient(SUPA_URL, SUPA_KEY);
 
-// ─── CP → COLONIAS (API gratuita sepomex) ──────────────────────
-
-
-
 async function testConn() {
   try {
     var { data: todos, error } = await db.from('merida_registros').select('cliente_nombre');
@@ -330,7 +333,7 @@ async function testConn() {
 }
 
 // ─── VARS ──────────────────────────────────────────────────────
-const FREQ = ['','Diaria','Semanal','Quincenal','Mensual','Bimestral','Trimestral','Semestral','Anual'];
+const FREQ = ['','Diaria','Semanal','Quincenal','Mensual','Bimestral','Trimestral','Semestral','Anual','No aplica'];
 let rc = 0;
 
 function mkopts(arr) {
@@ -368,6 +371,7 @@ function addRow() {
     '<td><input class="ti" id="pz' + i + '" type="number" min="0" placeholder="Ej: 24" oninput="chk(' + i + ')" style="min-width:65px"></td>' +
     '<td><input class="ti" id="pc' + i + '" type="text" inputmode="decimal" placeholder="$0.00" oninput="chk(' + i + ')" onfocus="focusPrecio(this)" onblur="fmtPrecio(this,' + i + ')" style="min-width:90px"></td>' +
     '<td><select class="ts" id="f' + i + '" onchange="chk(' + i + ')">' + mkopts(FREQ) + '</select></td>' +
+    '<td><textarea class="ti-comment" id="co' + i + '" placeholder="Notas / comentarios opcionales..." oninput="autoResize(this)" style="min-width:140px"></textarea></td>' +
     '<td style="text-align:center">' +
       '<div style="display:flex;align-items:center;justify-content:center;gap:5px">' +
         '<div class="sdot" id="d' + i + '"></div>' +
@@ -385,6 +389,12 @@ function addRow() {
   renum();
   upd();
   document.getElementById('p' + i).focus();
+}
+
+// ─── AUTO RESIZE TEXTAREA ──────────────────────────────────────
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
 }
 
 // ─── PRECIO FORMAT ─────────────────────────────────────────────
@@ -413,7 +423,6 @@ function chk(i) {
   });
   var r = document.getElementById('r'+i);
   var d = document.getElementById('d'+i);
-  var sb = document.getElementById('sb'+i);
   if (!r) return;
   r.classList.toggle('done', filled);
   if (d) d.classList.toggle('on', filled);
@@ -430,13 +439,14 @@ async function guardarFila(i) {
   var giro    = document.getElementById('cli-giro').value;
   var dir     = [calle, colonia, cp, ciudad].filter(Boolean).join(', ');
 
-  var prod   = (document.getElementById('p'+i)?.value || '').trim();
-  var marca  = document.getElementById('m'+i)?.value || '';
-  var pres   = document.getElementById('pr'+i)?.value || '';
-  var unidad = document.getElementById('un'+i)?.value || '';
-  var pz     = document.getElementById('pz'+i)?.value || '';
-  var precio = document.getElementById('pc'+i)?.value || '';
-  var freq   = document.getElementById('f'+i)?.value || '';
+  var prod     = (document.getElementById('p'+i)?.value || '').trim();
+  var marca    = document.getElementById('m'+i)?.value || '';
+  var pres     = document.getElementById('pr'+i)?.value || '';
+  var unidad   = document.getElementById('un'+i)?.value || '';
+  var pz       = document.getElementById('pz'+i)?.value || '';
+  var precio   = document.getElementById('pc'+i)?.value || '';
+  var freq     = document.getElementById('f'+i)?.value || '';
+  var comentario = document.getElementById('co'+i)?.value.trim() || '';
 
   if (!prod || !marca || !pres || !pz || !precio || !freq) {
     toast('⚠ Completa todos los campos de la fila', 'warn');
@@ -463,6 +473,7 @@ async function guardarFila(i) {
     pz_presentacion: pz,
     precio_compra: precio,
     frecuencia: freq,
+    comentarios: comentario,
     fecha_captura: new Date().toISOString()
   };
 
@@ -470,8 +481,7 @@ async function guardarFila(i) {
     var res = await db.from('merida_registros').insert(rec);
     if (res.error) throw res.error;
 
-    // Bloquear fila — ya guardada, no se puede editar ni borrar
-    ['p','m','pr','un','pz','pc','f'].forEach(function(k) {
+    ['p','m','pr','un','pz','pc','f','co'].forEach(function(k) {
       var el = document.getElementById(k+i);
       if (el) { el.readOnly = true; el.disabled = true; el.style.opacity = '.75'; }
     });
@@ -481,7 +491,6 @@ async function guardarFila(i) {
     sb.style.background = 'var(--green)';
     var d = document.getElementById('d'+i);
     if (d) { d.classList.add('on'); }
-    // Mostrar botón de borrar (solo visual — va a tabla admin)
     var delBtn = document.getElementById('del'+i);
     if (delBtn) delBtn.style.display = 'inline-flex';
     toast('✓ Producto guardado correctamente', 'ok');
@@ -511,19 +520,15 @@ function upd() {
   document.getElementById('pf').style.width = total ? (done / total * 100) + '%' : '0%';
 }
 
-// ─── INTENTO DE BORRADO → tabla admin oculta ───────────────────
+// ─── INTENTO DE BORRADO ────────────────────────────────────────
 async function intentoBorrar(i) {
   var nombre = document.getElementById('cli-nombre').value.trim();
-  var prod   = (document.getElementById('p'+i)?.value || document.getElementById('sb'+i)?.dataset?.prod || '').trim();
-  var marca  = '';
-  // Intentar leer los valores aunque estén disabled
-  ['p','m','pr','pz','pc','f'].forEach(function(k) {
+  var prod = '', marca = '';
+  ['p','m'].forEach(function(k) {
     var el = document.getElementById(k+i);
     if (el && k==='p') prod  = el.value || prod;
     if (el && k==='m') marca = el.value || marca;
   });
-
-  // Registrar intento silenciosamente en tabla admin
   try {
     await db.from('merida_intentos_borrado').insert({
       cliente_nombre: nombre || '(sin nombre)',
@@ -533,9 +538,7 @@ async function intentoBorrar(i) {
       fecha_intento: new Date().toISOString(),
       user_agent: navigator.userAgent.substring(0, 120)
     });
-  } catch(e) { /* silencioso — el usuario no sabe que se registró */ }
-
-  // Feedback visual — simular que "se eliminó" pero en realidad no pasa nada
+  } catch(e) { }
   var r = document.getElementById('r'+i);
   if (r) {
     r.style.transition = 'all .4s ease';
@@ -547,7 +550,7 @@ async function intentoBorrar(i) {
   }
 }
 
-// ─── KARDEX EXCEL (lee directo de Supabase — incluye clientes anteriores) ────
+// ─── KARDEX EXCEL ─────────────────────────────────────────────
 async function descargarKardex() {
   toast('⏳ Generando Kardex...', 'warn');
   try {
@@ -565,15 +568,13 @@ async function descargarKardex() {
     lines.push('"Generado:","' + fecha + '"');
     lines.push('"Total registros:","' + data.length + '"');
     lines.push('');
-    lines.push(['"#"','"Cliente"','"Calle y Número"','"Colonia"','"CP"','"Ciudad"','"Estado"','"Giro"','"Producto"','"Marca"','"Presentación"','"Unidad"','"Pz / Present."','"Precio Compra (sin IVA)"','"Frecuencia / Forecast"','"Fecha"','"Hora (Mérida)"'].join(','));
+    lines.push(['"#"','"Cliente"','"Calle y Número"','"Colonia"','"CP"','"Ciudad"','"Estado"','"Giro"','"Producto"','"Marca"','"Presentación"','"Unidad"','"Pz / Present."','"Precio Compra (sin IVA)"','"Frecuencia / Forecast"','"Comentarios"','"Fecha"','"Hora (Mérida)"'].join(','));
 
     data.forEach(function(r, idx) {
-      // Para registros viejos, intentar parsear cliente_dir
       var calle_val   = r.cliente_calle   || '';
       var colonia_val = r.cliente_colonia || '';
       var cp_val      = r.cliente_cp      || '';
       var ciudad_val  = r.cliente_ciudad  || '';
-      // Si no hay campos separados, usar cliente_dir completo en Calle
       if (!calle_val && !colonia_val && r.cliente_dir) {
         calle_val = r.cliente_dir;
       }
@@ -594,6 +595,7 @@ async function descargarKardex() {
         '"'+(r.pz_presentacion||'')+'"',
         '"'+(r.precio_compra||'')+'"',
         '"'+(r.frecuencia||'')+'"',
+        '"'+(r.comentarios||'')+'"',
         '"'+(fc ? fc.toLocaleDateString('es-MX') : '')+'"',
         '"'+(fc ? fc.toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}) : '')+'"'
       ].join(','));
@@ -622,9 +624,8 @@ function toast(msg, type) {
   setTimeout(function() { t.style.transform = 'translateY(60px)'; t.style.opacity = '0'; }, 3200);
 }
 
-// ─── INIT ──────────────────────────────────────────────────────
+// ─── MODAL / BARRIDO ──────────────────────────────────────────
 function abrirModal(){
-  // Contar filas pendientes
   var pendientes = contarPendientes();
   var sub = document.querySelector('.modal-sub');
   if (pendientes > 0) {
@@ -647,7 +648,6 @@ function contarPendientes() {
 async function iniciarBarrido() {
   cerrarModal();
 
-  // Recopilar todas las filas NO guardadas
   var nombre  = document.getElementById('cli-nombre').value.trim();
   var calle   = document.getElementById('cli-calle').value.trim();
   var cp      = document.getElementById('cli-cp').value.trim();
@@ -658,36 +658,34 @@ async function iniciarBarrido() {
 
   var filas = [];
   document.querySelectorAll('#tbody tr[data-idx]').forEach(function(r) {
-    if (r.classList.contains('saved')) return; // ya guardada
+    if (r.classList.contains('saved')) return;
     var i = r.dataset.idx;
-    var prod  = (document.getElementById('p'+i)?.value || '').trim();
-    var marca = (document.getElementById('m'+i)?.value || '').trim();
-    var pres  = (document.getElementById('pr'+i)?.value || '').trim();
-    var unidad= (document.getElementById('un'+i)?.value || '').trim();
-    var pz    = (document.getElementById('pz'+i)?.value || '').trim();
-    var precio= (document.getElementById('pc'+i)?.value || '').trim();
-    var freq  = (document.getElementById('f'+i)?.value || '').trim();
-    filas.push({ i, prod, marca, pres, unidad, pz, precio, freq });
+    var prod       = (document.getElementById('p'+i)?.value || '').trim();
+    var marca      = (document.getElementById('m'+i)?.value || '').trim();
+    var pres       = (document.getElementById('pr'+i)?.value || '').trim();
+    var unidad     = (document.getElementById('un'+i)?.value || '').trim();
+    var pz         = (document.getElementById('pz'+i)?.value || '').trim();
+    var precio     = (document.getElementById('pc'+i)?.value || '').trim();
+    var freq       = (document.getElementById('f'+i)?.value || '').trim();
+    var comentario = (document.getElementById('co'+i)?.value.trim() || '');
+    filas.push({ i, prod, marca, pres, unidad, pz, precio, freq, comentario });
   });
 
-  // Si no hay nada pendiente, solo limpiar
   if (filas.length === 0) {
     limpiarPantalla();
     toast('✓ Listo para nuevo cliente', 'ok');
     return;
   }
 
-  // Mostrar overlay de barrido
-  var overlay  = document.getElementById('sweep-overlay');
-  var rowsEl   = document.getElementById('sweep-rows');
-  var barEl    = document.getElementById('sweep-bar');
-  var counterEl= document.getElementById('sweep-counter');
-  var doneMsg  = document.getElementById('sweep-done-msg');
-  var btnNext  = document.getElementById('btn-sweep-next');
-  var titleEl  = document.getElementById('sweep-title');
-  var subEl    = document.getElementById('sweep-sub');
+  var overlay   = document.getElementById('sweep-overlay');
+  var rowsEl    = document.getElementById('sweep-rows');
+  var barEl     = document.getElementById('sweep-bar');
+  var counterEl = document.getElementById('sweep-counter');
+  var doneMsg   = document.getElementById('sweep-done-msg');
+  var btnNext   = document.getElementById('btn-sweep-next');
+  var titleEl   = document.getElementById('sweep-title');
+  var subEl     = document.getElementById('sweep-sub');
 
-  // Reset
   rowsEl.innerHTML = '';
   barEl.style.width = '0%';
   doneMsg.style.display = 'none';
@@ -696,9 +694,8 @@ async function iniciarBarrido() {
   subEl.textContent = 'Registrando productos de: ' + (nombre || 'Cliente sin nombre');
   overlay.classList.add('open');
 
-  // Crear filas visuales
   var rowEls = {};
-  filas.forEach(function(f, idx) {
+  filas.forEach(function(f) {
     var div = document.createElement('div');
     div.className = 'sweep-row';
     div.id = 'sw-' + f.i;
@@ -710,21 +707,17 @@ async function iniciarBarrido() {
     rowEls[f.i] = div;
   });
 
-  // Guardar una por una con animación
   var ok = 0, errors = 0;
   for (var idx = 0; idx < filas.length; idx++) {
     var f = filas[idx];
     var el = rowEls[f.i];
 
-    // Animar como "guardando"
     el.className = 'sweep-row saving';
     el.querySelector('.sweep-icon').textContent = '🔄';
     el.querySelector('.sweep-status').textContent = 'Guardando...';
     el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-
     counterEl.textContent = (idx + 1) + ' de ' + filas.length + ' productos';
 
-    // Validar campos mínimos
     if (!f.prod || !nombre) {
       el.className = 'sweep-row skip';
       el.querySelector('.sweep-icon').textContent = '⚠️';
@@ -747,6 +740,7 @@ async function iniciarBarrido() {
           pz_presentacion: f.pz,
           precio_compra: f.precio,
           frecuencia: f.freq,
+          comentarios: f.comentario,
           fecha_captura: new Date().toISOString()
         };
         var res = await db.from('merida_registros').insert(rec);
@@ -762,13 +756,10 @@ async function iniciarBarrido() {
         errors++;
       }
     }
-
-    // Actualizar barra
     barEl.style.width = ((idx + 1) / filas.length * 100) + '%';
     await new Promise(function(r){ setTimeout(r, 220); });
   }
 
-  // Fin del barrido
   titleEl.textContent = errors === 0 ? '🎉 ¡Barrido completado!' : '⚠️ Barrido con ' + errors + ' error(es)';
   subEl.textContent = ok + ' producto(s) guardados' + (errors > 0 ? ', ' + errors + ' con error' : '') + '.';
   doneMsg.style.display = 'block';
@@ -789,7 +780,7 @@ function limpiarPantalla() {
   document.getElementById('cli-colonia').value = '';
   document.getElementById('cli-ciudad').value = '';
   document.getElementById('cli-giro').value = '';
-  document.getElementById('tbody').innerHTML = '<tr id="empty-row"><td colspan="9"><div class="empty-state"><div class="empty-icon">📋</div><div>Presiona <strong>&quot;+ Agregar producto&quot;</strong> para comenzar</div></div></td></tr>';
+  document.getElementById('tbody').innerHTML = '<tr id="empty-row"><td colspan="10"><div class="empty-state"><div class="empty-icon">📋</div><div>Presiona <strong>&quot;+ Agregar producto&quot;</strong> para comenzar</div></div></td></tr>';
   rc = 0;
   upd();
   window.scrollTo({ top: 0, behavior: 'smooth' });
